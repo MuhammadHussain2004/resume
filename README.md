@@ -29,10 +29,14 @@ The workflow needs two repository secrets. Add them under
 via the CLI:
 
 ```bash
-# A Personal Access Token with "repo" scope, so the workflow can read your
-# private repos too (the default GITHUB_TOKEN can only see this repo).
-# Create one at https://github.com/settings/tokens
-gh secret set GH_READ_TOKEN --repo MuhammadHussain2004/resume
+# A token with "repo" scope, so the workflow can read your private repos too
+# (the default GITHUB_TOKEN can only see this one repo). Easiest: reuse your
+# already-authenticated gh CLI token (it already has the repo scope):
+gh secret set GH_READ_TOKEN --repo MuhammadHussain2004/resume --body "$(gh auth token)"
+
+# Or, for a token that won't be affected by `gh auth logout` later, create a
+# dedicated one at https://github.com/settings/tokens (repo scope) and run:
+#   gh secret set GH_READ_TOKEN --repo MuhammadHussain2004/resume
 
 # Your Anthropic API key, from https://console.anthropic.com/settings/keys
 gh secret set ANTHROPIC_API_KEY --repo MuhammadHussain2004/resume
