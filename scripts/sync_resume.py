@@ -33,12 +33,13 @@ GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta"
 
 
 def resolve_model():
-    """Gemini model names change over time, so rather than hardcode one,
-    discover what this API key can actually use and pick a cost-effective
-    ("flash") model that supports generateContent. Set GEMINI_MODEL to
-    override."""
+    """Returns a list of Gemini model names to try, best candidate first.
+    Model availability/names drift over time and old ones get deprecated
+    (a 404 with a "no longer available" message, not a clean error code), so
+    rather than hardcode one we rank ListModels' output and let the caller
+    walk the list until one actually works. Set GEMINI_MODEL to pin one."""
     if os.environ.get("GEMINI_MODEL"):
-        return os.environ["GEMINI_MODEL"]
+        return [os.environ["GEMINI_MODEL"]]
 
     resp = requests.get(
         f"{GEMINI_API_BASE}/models", params={"key": GEMINI_API_KEY}, timeout=30
@@ -53,20 +54,29 @@ def resolve_model():
     if not candidates:
         raise RuntimeError("No Gemini models available for this API key support generateContent.")
 
+    version_re = re.compile(r"(\d+)(?:\.(\d+))?")
+
     def rank(name):
         score = 0
+        if "latest" in name:
+            score += 1000  # alias that auto-tracks the current model, most future-proof
+        match = version_re.search(name)
+        if match:
+            major = int(match.group(1))
+            minor = int(match.group(2) or 0)
+            score += major * 100 + minor  # prefer newer versions
         if "flash" in name:
-            score -= 2
+            score += 20
         if "pro" in name:
-            score -= 1
-        if "exp" in name or "preview" in name or "thinking" in name:
-            score += 5
-        if "vision" in name or "embedding" in name or "tts" in name or "image" in name:
             score += 10
-        return score
+        if "exp" in name or "preview" in name or "thinking" in name:
+            score -= 500  # deprioritize experimental/preview builds
+        if any(x in name for x in ("vision", "embedding", "tts", "image", "audio")):
+            score -= 10000  # not text-generation models, exclude
+        return -score  # sort ascending -> best (highest score) first
 
     candidates.sort(key=rank)
-    return candidates[0]
+    return candidates
 
 
 def gh_get(path, params=None):
@@ -198,7 +208,14 @@ def strip_code_fences(text):
     return match.group(1) if match else text
 
 
+class ModelUnavailable(Exception):
+    pass
+
+
 def call_gemini(model, system, user):
+    """Raises ModelUnavailable (caller should try the next candidate) on a
+    404, and RuntimeError for anything else (auth/quota/etc, retrying with a
+    different model won't help)."""
     payload = {
         "systemInstruction": {"parts": [{"text": system}]},
         "contents": [{"role": "user", "parts": [{"text": user}]}],
@@ -223,21 +240,34 @@ def call_gemini(model, system, user):
             raise RuntimeError(f"Gemini returned empty text: {json.dumps(data)[:1000]}")
         return text
 
-    raise RuntimeError(f"generateContent 404'd on both API versions for model '{model}'. Last error: {last_error}")
+    raise ModelUnavailable(f"model '{model}' 404'd on both API versions. Last error: {last_error}")
 
 
 def main():
     with open(RESUME_PATH, "r", encoding="utf-8") as f:
         current_tex = f.read()
 
-    model = resolve_model()
-    print(f"Using Gemini model: {model}")
+    model_candidates = resolve_model()
+    print(f"Gemini model candidates (best first): {model_candidates}")
 
     profile = fetch_profile()
     repo_summaries = fetch_repo_summaries()
     system, user = build_prompt(current_tex, profile, repo_summaries)
 
-    raw_output = call_gemini(model, system, user)
+    raw_output = None
+    errors = []
+    for model in model_candidates:
+        try:
+            raw_output = call_gemini(model, system, user)
+            print(f"Used Gemini model: {model}")
+            break
+        except ModelUnavailable as e:
+            print(f"Skipping {model}: {e}")
+            errors.append(str(e))
+
+    if raw_output is None:
+        raise RuntimeError(f"No working Gemini model found among candidates. Errors: {errors}")
+
     updated_tex = strip_code_fences(raw_output)
 
     if not updated_tex.strip().startswith("\\documentclass"):
