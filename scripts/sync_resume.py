@@ -13,6 +13,7 @@ import json
 import os
 import re
 import sys
+import time
 from datetime import datetime, timezone
 
 import requests
@@ -225,7 +226,15 @@ def call_gemini(model, system, user):
     last_error = None
     for api_version in ("v1beta", "v1"):
         url = f"https://generativelanguage.googleapis.com/{api_version}/models/{model}:generateContent"
-        resp = requests.post(url, params={"key": GEMINI_API_KEY}, json=payload, timeout=120)
+
+        resp = None
+        for attempt in range(3):
+            resp = requests.post(url, params={"key": GEMINI_API_KEY}, json=payload, timeout=120)
+            if resp.status_code in (429, 503) and attempt < 2:
+                time.sleep(2 ** (attempt + 1))
+                continue
+            break
+
         if resp.status_code == 404:
             last_error = f"{api_version}: 404 {resp.text[:500]}"
             continue
@@ -264,6 +273,12 @@ def main():
         except ModelUnavailable as e:
             print(f"Skipping {model}: {e}")
             errors.append(str(e))
+        except requests.HTTPError as e:
+            if e.response is not None and e.response.status_code in (429, 503):
+                print(f"Skipping {model} (overloaded/rate-limited): {e}")
+                errors.append(str(e))
+                continue
+            raise
 
     if raw_output is None:
         raise RuntimeError(f"No working Gemini model found among candidates. Errors: {errors}")
