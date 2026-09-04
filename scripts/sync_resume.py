@@ -204,22 +204,26 @@ def call_gemini(model, system, user):
         "contents": [{"role": "user", "parts": [{"text": user}]}],
         "generationConfig": {"maxOutputTokens": 8192, "temperature": 0.3},
     }
-    resp = requests.post(
-        f"{GEMINI_API_BASE}/models/{model}:generateContent",
-        params={"key": GEMINI_API_KEY},
-        json=payload,
-        timeout=120,
-    )
-    resp.raise_for_status()
-    data = resp.json()
-    candidates = data.get("candidates") or []
-    if not candidates:
-        raise RuntimeError(f"Gemini returned no candidates: {json.dumps(data)[:1000]}")
-    parts = candidates[0].get("content", {}).get("parts", [])
-    text = "".join(p.get("text", "") for p in parts)
-    if not text.strip():
-        raise RuntimeError(f"Gemini returned empty text: {json.dumps(data)[:1000]}")
-    return text
+
+    last_error = None
+    for api_version in ("v1beta", "v1"):
+        url = f"https://generativelanguage.googleapis.com/{api_version}/models/{model}:generateContent"
+        resp = requests.post(url, params={"key": GEMINI_API_KEY}, json=payload, timeout=120)
+        if resp.status_code == 404:
+            last_error = f"{api_version}: 404 {resp.text[:500]}"
+            continue
+        resp.raise_for_status()
+        data = resp.json()
+        candidates = data.get("candidates") or []
+        if not candidates:
+            raise RuntimeError(f"Gemini returned no candidates: {json.dumps(data)[:1000]}")
+        parts = candidates[0].get("content", {}).get("parts", [])
+        text = "".join(p.get("text", "") for p in parts)
+        if not text.strip():
+            raise RuntimeError(f"Gemini returned empty text: {json.dumps(data)[:1000]}")
+        return text
+
+    raise RuntimeError(f"generateContent 404'd on both API versions for model '{model}'. Last error: {last_error}")
 
 
 def main():
