@@ -1,0 +1,50 @@
+# Resume — auto-synced with GitHub activity
+
+This repo holds Muhammad Hussain Khan Lodhi's resume (`Muhammad_Hussain_Resume.tex` /
+`.pdf`) and a GitHub Actions workflow that keeps it up to date automatically.
+
+## How it works
+
+Every day at 08:00 PKT (and on-demand via **Actions → Sync Resume with GitHub
+Activity → Run workflow**), a job:
+
+1. Pulls a snapshot of all owner repos on `github.com/MuhammadHussain2004`
+   (description, topics, languages, README excerpt, stars, last-pushed date).
+2. Sends that snapshot plus the current resume `.tex` to Claude, with
+   instructions to only touch the **Summary**, **Projects**, and
+   **Technical Skills** sections — Education, Certifications, Experience, and
+   the contact header are left untouched unless the GitHub data gives
+   unambiguous evidence of a change.
+3. If Claude returns a materially different resume, the workflow recompiles
+   the PDF and commits both files back to this repo.
+
+So the latest resume — `.tex` and `.pdf` — always lives at the root of this
+repo. Whenever you need it, just come here and download
+[`Muhammad_Hussain_Resume.pdf`](./Muhammad_Hussain_Resume.pdf).
+
+## One-time setup (required before the automation will run)
+
+The workflow needs two repository secrets. Add them under
+**Settings → Secrets and variables → Actions → New repository secret**, or
+via the CLI:
+
+```bash
+# A Personal Access Token with "repo" scope, so the workflow can read your
+# private repos too (the default GITHUB_TOKEN can only see this repo).
+# Create one at https://github.com/settings/tokens
+gh secret set GH_READ_TOKEN --repo MuhammadHussain2004/resume
+
+# Your Anthropic API key, from https://console.anthropic.com/settings/keys
+gh secret set ANTHROPIC_API_KEY --repo MuhammadHussain2004/resume
+```
+
+Until both secrets are set, the scheduled runs will fail at the
+"Analyze GitHub activity" step (or simply be skipped) — commit and push your
+other repos as normal in the meantime, then add the secrets whenever you're
+ready to switch the automation on.
+
+## Local editing
+
+You can still edit `Muhammad_Hussain_Resume.tex` by hand any time — the next
+scheduled run treats your manual edits as the new baseline and only adjusts
+what the GitHub data actually warrants.

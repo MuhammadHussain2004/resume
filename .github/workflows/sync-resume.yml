@@ -1,0 +1,47 @@
+name: Sync Resume with GitHub Activity
+
+on:
+  schedule:
+    # 03:00 UTC daily = 08:00 PKT
+    - cron: "0 3 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Analyze GitHub activity and refresh resume
+        env:
+          GH_READ_TOKEN: ${{ secrets.GH_READ_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_USERNAME: MuhammadHussain2004
+        run: python scripts/sync_resume.py
+
+      - name: Compile PDF
+        if: env.RESUME_CHANGED == 'true'
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: Muhammad_Hussain_Resume.tex
+
+      - name: Commit and push updated resume
+        if: env.RESUME_CHANGED == 'true'
+        run: |
+          git config user.name "resume-sync-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add Muhammad_Hussain_Resume.tex Muhammad_Hussain_Resume.pdf
+          git commit -m "chore: auto-sync resume with latest GitHub activity"
+          git push
