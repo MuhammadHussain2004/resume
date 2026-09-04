@@ -8,14 +8,16 @@ This repo holds Muhammad Hussain Khan Lodhi's resume (`Muhammad_Hussain_Resume.t
 Every day at 08:00 PKT (and on-demand via **Actions → Sync Resume with GitHub
 Activity → Run workflow**), a job:
 
-1. Pulls a snapshot of all owner repos on `github.com/MuhammadHussain2004`
-   (description, topics, languages, README excerpt, stars, last-pushed date).
-2. Sends that snapshot plus the current resume `.tex` to Claude, with
-   instructions to only touch the **Summary**, **Projects**, and
-   **Technical Skills** sections — Education, Certifications, Experience, and
-   the contact header are left untouched unless the GitHub data gives
-   unambiguous evidence of a change.
-3. If Claude returns a materially different resume, the workflow recompiles
+1. Pulls a snapshot of `github.com/MuhammadHussain2004`: profile bio, the
+   special profile README (if any), and all owner repos (description,
+   topics, languages, README excerpt, stars, last-pushed date).
+2. Sends that snapshot plus the current resume `.tex` to Gemini, with
+   instructions that **any** section — Summary, Education, Certifications,
+   Experience, Projects, Technical Skills — may be updated, but only where
+   the GitHub data gives clear, unambiguous evidence for that specific
+   change. A section with no supporting evidence is left untouched; nothing
+   is fabricated, and the contact header is never touched.
+3. If Gemini returns a materially different resume, the workflow recompiles
    the PDF and commits both files back to this repo.
 
 So the latest resume — `.tex` and `.pdf` — always lives at the root of this
@@ -38,9 +40,13 @@ gh secret set GH_READ_TOKEN --repo MuhammadHussain2004/resume --body "$(gh auth 
 # dedicated one at https://github.com/settings/tokens (repo scope) and run:
 #   gh secret set GH_READ_TOKEN --repo MuhammadHussain2004/resume
 
-# Your Anthropic API key, from https://console.anthropic.com/settings/keys
-gh secret set ANTHROPIC_API_KEY --repo MuhammadHussain2004/resume
+# Your Gemini API key, from https://aistudio.google.com/apikey
+gh secret set GEMINI_API_KEY --repo MuhammadHussain2004/resume
 ```
+
+Both secrets are already set on this repo (as of the automation being wired
+up). If the Gemini key ever rotates, just re-run that last command with the
+new value.
 
 Until both secrets are set, the scheduled runs will fail at the
 "Analyze GitHub activity" step (or simply be skipped) — commit and push your

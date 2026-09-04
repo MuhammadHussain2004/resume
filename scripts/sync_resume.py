@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-Analyzes the GitHub account's public + private repos and asks Claude to
-refresh the Projects / Technical Skills / Summary sections of the resume
-LaTeX source to reflect the latest work. Only overwrites the .tex file if
-Claude actually returns a materially different document; the caller (the
-GitHub Actions workflow) decides whether to recompile the PDF and commit.
+Analyzes the GitHub account (repos, profile bio, profile README) and asks
+Gemini to refresh ANY resume section — Summary, Education, Certifications,
+Experience, Projects, Technical Skills — wherever the GitHub data gives clear,
+unambiguous evidence of a change. Only overwrites the .tex file if Gemini
+actually returns a materially different document; the caller (the GitHub
+Actions workflow) decides whether to recompile the PDF and commit.
 """
 
 import base64
@@ -15,27 +16,53 @@ import sys
 from datetime import datetime, timezone
 
 import requests
-from anthropic import Anthropic
 
 GITHUB_USERNAME = os.environ["GITHUB_USERNAME"]
 GH_READ_TOKEN = os.environ["GH_READ_TOKEN"]
-ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
+GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 RESUME_PATH = os.environ.get("RESUME_TEX_PATH", "Muhammad_Hussain_Resume.tex")
-MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
-MAX_REPOS = int(os.environ.get("MAX_REPOS", "15"))
+MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+MAX_REPOS = int(os.environ.get("MAX_REPOS", "20"))
 
 GITHUB_API = "https://api.github.com"
-HEADERS = {
+GH_HEADERS = {
     "Authorization": f"Bearer {GH_READ_TOKEN}",
     "Accept": "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
 }
+GEMINI_ENDPOINT = (
+    f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
+)
 
 
 def gh_get(path, params=None):
-    resp = requests.get(f"{GITHUB_API}{path}", headers=HEADERS, params=params, timeout=30)
+    resp = requests.get(f"{GITHUB_API}{path}", headers=GH_HEADERS, params=params, timeout=30)
     resp.raise_for_status()
     return resp.json()
+
+
+def fetch_profile():
+    """Bio/company/location from the account, plus the special profile README
+    repo (github.com/<user>/<user>) many developers use to list current work,
+    certifications, and experience."""
+    profile = {}
+    try:
+        user = gh_get(f"/users/{GITHUB_USERNAME}")
+        profile["bio"] = user.get("bio") or ""
+        profile["company"] = user.get("company") or ""
+        profile["location"] = user.get("location") or ""
+        profile["blog"] = user.get("blog") or ""
+    except requests.HTTPError:
+        pass
+
+    try:
+        readme = gh_get(f"/repos/{GITHUB_USERNAME}/{GITHUB_USERNAME}/readme")
+        content = base64.b64decode(readme["content"]).decode("utf-8", errors="ignore")
+        profile["profile_readme"] = content[:4000]
+    except requests.HTTPError:
+        profile["profile_readme"] = ""
+
+    return profile
 
 
 def fetch_repo_summaries():
@@ -43,7 +70,7 @@ def fetch_repo_summaries():
         f"/users/{GITHUB_USERNAME}/repos",
         params={"per_page": 100, "sort": "pushed", "direction": "desc", "type": "owner"},
     )
-    repos = [r for r in repos if not r.get("fork")]
+    repos = [r for r in repos if not r.get("fork") and r["name"] != GITHUB_USERNAME]
     repos = repos[:MAX_REPOS]
 
     summaries = []
@@ -79,40 +106,53 @@ def fetch_repo_summaries():
     return summaries
 
 
-def build_prompt(resume_tex, repo_summaries):
+def build_prompt(resume_tex, profile, repo_summaries):
     system = (
-        "You are maintaining a LaTeX resume for a full-stack software engineer. "
-        "You will be given the CURRENT resume .tex source and a JSON snapshot of "
-        "the person's GitHub repositories (from the GitHub API). Your job is to "
-        "decide whether the resume needs updating, and if so, return the FULL "
+        "You are maintaining a LaTeX resume for a full-stack software "
+        "engineer. You will be given the CURRENT resume .tex source and a "
+        "JSON snapshot of the person's GitHub account (profile bio, their "
+        "profile README, and their repositories). Your job is to decide "
+        "whether the resume needs updating, and if so, return the FULL "
         "updated .tex file.\n\n"
         "Rules:\n"
-        "- Preserve the LaTeX preamble, custom commands, and overall structure exactly.\n"
-        "- Only touch the Projects, Technical Skills, and Summary sections. "
-        "Never invent or alter Education, Certifications, Experience, or the "
-        "contact-info header unless the GitHub data gives explicit, unambiguous "
-        "evidence of a change there.\n"
+        "- Preserve the LaTeX preamble, custom commands, and overall "
+        "document structure exactly.\n"
+        "- ANY section may be updated — Summary, Education, Certifications, "
+        "Experience, Projects, Technical Skills — but ONLY when the GitHub "
+        "snapshot gives clear, unambiguous evidence for that specific "
+        "change. If a section has no supporting evidence in the data, leave "
+        "it completely untouched. Never fabricate degrees, employers, dates, "
+        "metrics, or outcomes that aren't evidenced in the data. Never touch "
+        "the contact-info header (name/phone/email/links) unless the GitHub "
+        "profile data explicitly gives a new value for one of those exact "
+        "fields.\n"
         "- Projects section: keep at most 4 of the strongest / most recent "
-        "projects. Prefer repos with real substance (a description, a README, "
-        "meaningful code) over trivial/empty ones. Each project keeps the "
-        "existing \\resumeProjectHeading / \\resumeItemListStart pattern, with "
-        "GitHub link (and live demo link via `homepage` if present).\n"
+        "projects. Prefer repos with real substance (a description, a "
+        "README, meaningful code) over trivial/empty ones. Each project "
+        "keeps the existing \\resumeProjectHeading / \\resumeItemListStart "
+        "pattern, with GitHub link (and live demo link via `homepage` if "
+        "present).\n"
         "- Write bullet points the way a strong resume does: concrete, "
-        "quantified where the README/description supports it, action-verb-led. "
-        "Never fabricate metrics, users, or outcomes that aren't evidenced in "
-        "the repo data.\n"
-        "- Technical Skills: merge in genuinely new languages/frameworks seen "
-        "across repos; do not remove skills just because a repo aged out of "
-        "the top list.\n"
-        "- If nothing meaningfully changed since the current resume, return the "
-        "resume completely UNCHANGED, byte for byte.\n"
+        "quantified where the README/description supports it, "
+        "action-verb-led.\n"
+        "- Technical Skills: merge in genuinely new languages/frameworks "
+        "seen across repos; do not remove skills just because a repo aged "
+        "out of the top list.\n"
+        "- Education/Certifications/Experience: only add or edit an entry "
+        "if the profile bio or profile README explicitly states something "
+        "new (e.g. a newly listed certification, a new job/role, a new "
+        "degree status). Otherwise leave these sections exactly as they "
+        "are.\n"
+        "- If nothing meaningfully changed since the current resume, return "
+        "the resume completely UNCHANGED, byte for byte.\n"
         "- Output ONLY the raw .tex file content. No markdown fences, no "
         "commentary, no explanation before or after."
     )
 
     user = (
         f"CURRENT RESUME (.tex):\n{resume_tex}\n\n"
-        f"GITHUB SNAPSHOT (as of {datetime.now(timezone.utc).isoformat()}):\n"
+        f"GITHUB PROFILE:\n{json.dumps(profile, indent=2)}\n\n"
+        f"GITHUB REPOSITORIES (as of {datetime.now(timezone.utc).isoformat()}):\n"
         f"{json.dumps(repo_summaries, indent=2)}"
     )
     return system, user
@@ -124,21 +164,40 @@ def strip_code_fences(text):
     return match.group(1) if match else text
 
 
+def call_gemini(system, user):
+    payload = {
+        "systemInstruction": {"parts": [{"text": system}]},
+        "contents": [{"role": "user", "parts": [{"text": user}]}],
+        "generationConfig": {"maxOutputTokens": 8192, "temperature": 0.3},
+    }
+    resp = requests.post(
+        GEMINI_ENDPOINT,
+        params={"key": GEMINI_API_KEY},
+        json=payload,
+        timeout=120,
+    )
+    resp.raise_for_status()
+    data = resp.json()
+    candidates = data.get("candidates") or []
+    if not candidates:
+        raise RuntimeError(f"Gemini returned no candidates: {json.dumps(data)[:1000]}")
+    parts = candidates[0].get("content", {}).get("parts", [])
+    text = "".join(p.get("text", "") for p in parts)
+    if not text.strip():
+        raise RuntimeError(f"Gemini returned empty text: {json.dumps(data)[:1000]}")
+    return text
+
+
 def main():
     with open(RESUME_PATH, "r", encoding="utf-8") as f:
         current_tex = f.read()
 
+    profile = fetch_profile()
     repo_summaries = fetch_repo_summaries()
-    system, user = build_prompt(current_tex, repo_summaries)
+    system, user = build_prompt(current_tex, profile, repo_summaries)
 
-    client = Anthropic(api_key=ANTHROPIC_API_KEY)
-    response = client.messages.create(
-        model=MODEL,
-        max_tokens=8000,
-        system=system,
-        messages=[{"role": "user", "content": user}],
-    )
-    updated_tex = strip_code_fences(response.content[0].text)
+    raw_output = call_gemini(system, user)
+    updated_tex = strip_code_fences(raw_output)
 
     if not updated_tex.strip().startswith("\\documentclass"):
         print("Model output did not look like a valid .tex file; skipping update.", file=sys.stderr)

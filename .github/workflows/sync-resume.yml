@@ -27,7 +27,7 @@ jobs:
       - name: Analyze GitHub activity and refresh resume
         env:
           GH_READ_TOKEN: ${{ secrets.GH_READ_TOKEN }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_USERNAME: MuhammadHussain2004
         run: python scripts/sync_resume.py
 
