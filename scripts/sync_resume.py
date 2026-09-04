@@ -21,7 +21,6 @@ GITHUB_USERNAME = os.environ["GITHUB_USERNAME"]
 GH_READ_TOKEN = os.environ["GH_READ_TOKEN"]
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 RESUME_PATH = os.environ.get("RESUME_TEX_PATH", "Muhammad_Hussain_Resume.tex")
-MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 MAX_REPOS = int(os.environ.get("MAX_REPOS", "20"))
 
 GITHUB_API = "https://api.github.com"
@@ -30,9 +29,44 @@ GH_HEADERS = {
     "Accept": "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
 }
-GEMINI_ENDPOINT = (
-    f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
-)
+GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta"
+
+
+def resolve_model():
+    """Gemini model names change over time, so rather than hardcode one,
+    discover what this API key can actually use and pick a cost-effective
+    ("flash") model that supports generateContent. Set GEMINI_MODEL to
+    override."""
+    if os.environ.get("GEMINI_MODEL"):
+        return os.environ["GEMINI_MODEL"]
+
+    resp = requests.get(
+        f"{GEMINI_API_BASE}/models", params={"key": GEMINI_API_KEY}, timeout=30
+    )
+    resp.raise_for_status()
+    models = resp.json().get("models", [])
+    candidates = [
+        m["name"].split("/")[-1]
+        for m in models
+        if "generateContent" in m.get("supportedGenerationMethods", [])
+    ]
+    if not candidates:
+        raise RuntimeError("No Gemini models available for this API key support generateContent.")
+
+    def rank(name):
+        score = 0
+        if "flash" in name:
+            score -= 2
+        if "pro" in name:
+            score -= 1
+        if "exp" in name or "preview" in name or "thinking" in name:
+            score += 5
+        if "vision" in name or "embedding" in name or "tts" in name or "image" in name:
+            score += 10
+        return score
+
+    candidates.sort(key=rank)
+    return candidates[0]
 
 
 def gh_get(path, params=None):
@@ -164,14 +198,14 @@ def strip_code_fences(text):
     return match.group(1) if match else text
 
 
-def call_gemini(system, user):
+def call_gemini(model, system, user):
     payload = {
         "systemInstruction": {"parts": [{"text": system}]},
         "contents": [{"role": "user", "parts": [{"text": user}]}],
         "generationConfig": {"maxOutputTokens": 8192, "temperature": 0.3},
     }
     resp = requests.post(
-        GEMINI_ENDPOINT,
+        f"{GEMINI_API_BASE}/models/{model}:generateContent",
         params={"key": GEMINI_API_KEY},
         json=payload,
         timeout=120,
@@ -192,11 +226,14 @@ def main():
     with open(RESUME_PATH, "r", encoding="utf-8") as f:
         current_tex = f.read()
 
+    model = resolve_model()
+    print(f"Using Gemini model: {model}")
+
     profile = fetch_profile()
     repo_summaries = fetch_repo_summaries()
     system, user = build_prompt(current_tex, profile, repo_summaries)
 
-    raw_output = call_gemini(system, user)
+    raw_output = call_gemini(model, system, user)
     updated_tex = strip_code_fences(raw_output)
 
     if not updated_tex.strip().startswith("\\documentclass"):
