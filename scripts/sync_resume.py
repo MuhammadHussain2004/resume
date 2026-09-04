@@ -290,7 +290,8 @@ def main():
         print(updated_tex[:2000], file=sys.stderr)
         sys.exit(1)
 
-    changed = updated_tex.strip() != current_tex.strip()
+    updated_tex = updated_tex.strip() + "\n"
+    changed = updated_tex != current_tex.strip() + "\n"
     if changed:
         with open(RESUME_PATH, "w", encoding="utf-8") as f:
             f.write(updated_tex)
