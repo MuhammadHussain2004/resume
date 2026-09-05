@@ -92,3 +92,28 @@ manual edit immediately (instead of waiting for the next scheduled run), go
 to **Actions → Sync Resume with GitHub Activity → Run workflow** and check
 "Skip Gemini analysis, just recompile the PDF" — that recompiles and commits
 the PDF from whatever `.tex` is currently in the repo, with no AI call.
+
+## Getting the latest copy on your laptop and phone
+
+This repo's PDF is the source of truth, but you don't need to visit GitHub
+every time. On the machine this was set up on, a Windows Task Scheduler job
+(**Task Scheduler → Task Scheduler Library → SyncLatestResume**, script at
+`C:\Users\<you>\AppData\Local\ResumeSync\sync-resume.ps1`) runs daily at
+**9:00 AM PKT** — an hour after this repo's own 8:00 AM sync — and downloads
+the current PDF into:
+
+- `D:\general data` (synced to Google Drive)
+- `%USERPROFILE%\OneDrive\Resume`
+- `G:\My Drive\Resume` (the Google Drive virtual drive)
+
+Once OneDrive's and Google Drive's own phone apps sync those folders (and
+the file is marked "available offline" there), your phone always has that
+morning's resume with no manual download. The task is set to
+`StartWhenAvailable`, so if the laptop is off or asleep at 9 AM it just
+catches up the next time you're logged in, rather than skipping that day.
+Same safe-by-design pattern as everything else here: a failed download
+leaves every existing copy untouched.
+
+If you set this up on a new machine, recreate the scheduled task (daily
+trigger, `StartWhenAvailable` on) pointing at a copy of that same
+PowerShell script, adjusting the destination paths as needed.
