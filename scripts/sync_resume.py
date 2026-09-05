@@ -159,18 +159,35 @@ def build_prompt(resume_tex, profile, repo_summaries):
         "profile README, and their repositories). Your job is to decide "
         "whether the resume needs updating, and if so, return the FULL "
         "updated .tex file.\n\n"
-        "Rules:\n"
-        "- Preserve the LaTeX preamble, custom commands, and overall "
-        "document structure exactly.\n"
-        "- ANY section may be updated — Summary, Education, Certifications, "
-        "Experience, Projects, Technical Skills — but ONLY when the GitHub "
-        "snapshot gives clear, unambiguous evidence for that specific "
-        "change. If a section has no supporting evidence in the data, leave "
-        "it completely untouched. Never fabricate degrees, employers, dates, "
-        "metrics, or outcomes that aren't evidenced in the data. Never touch "
-        "the contact-info header (name/phone/email/links) unless the GitHub "
-        "profile data explicitly gives a new value for one of those exact "
-        "fields.\n"
+        "Hard rules (a program will mechanically verify these and reject "
+        "your output if you break them, so follow them exactly):\n"
+        "- Byte-for-byte preserve everything from \\documentclass through "
+        "\\begin{document} (the preamble: packages, margins, custom "
+        "\\newcommand definitions). Do not add, remove, or reformat any of "
+        "it.\n"
+        "- Byte-for-byte preserve the \\begin{center}...\\end{center} "
+        "contact-info block (name/phone/email/links/location) exactly as "
+        "given. Never change it.\n"
+        "- Keep exactly these six \\section{} commands, in this order, and "
+        "no others: Summary, Education, Certifications, Experience, "
+        "Projects, Technical Skills.\n"
+        "- Every new fact you add to Technical Skills (a language, "
+        "framework, tool, or platform not already present) MUST appear "
+        "verbatim (case-insensitive) somewhere in the GITHUB PROFILE or "
+        "GITHUB REPOSITORIES JSON below — in a description, README excerpt, "
+        "topic, or the languages list. If you cannot point to where a skill "
+        "came from in that data, do not add it. Guessing a plausible "
+        "tech stack from a project's category (e.g. assuming Redux because "
+        "it is a React app) is fabrication — do not do it.\n"
+        "- Every project you add or keep in Projects must use one of the "
+        "repo `url` values given below verbatim. Never invent a project or "
+        "a GitHub link.\n"
+        "- Never fabricate degrees, employers, dates, metrics, or outcomes "
+        "that aren't evidenced in the data.\n"
+        "- The whole resume must keep fitting on ONE page: if you add "
+        "content, remove or shorten something of equal or lesser weight so "
+        "total length doesn't grow. Do not let Projects exceed 4 entries or "
+        "Experience exceed its current entry count.\n"
         "- Projects section: keep at most 4 of the strongest / most recent "
         "projects. Prefer repos with real substance (a description, a "
         "README, meaningful code) over trivial/empty ones. Each project "
@@ -207,6 +224,100 @@ def strip_code_fences(text):
     text = text.strip()
     match = re.match(r"^```(?:latex|tex)?\n(.*)\n```$", text, re.DOTALL)
     return match.group(1) if match else text
+
+
+EXPECTED_SECTIONS = [
+    "Summary",
+    "Education",
+    "Certifications",
+    "Experience",
+    "Projects",
+    "Technical Skills",
+]
+
+# Words that show up as LaTeX/skills boilerplate rather than an actual claim
+# about a technology; excluded from the "was this ever mentioned in the
+# GitHub data" fabrication check so they don't cause false-positive rejections.
+SKILL_TOKEN_STOPWORDS = {
+    "languages", "core cs", "mern", "full-stack", "full stack", "databases",
+    "developer tools", "deployment", "cloud", "soft skills",
+}
+
+
+def extract_preamble(tex):
+    idx = tex.find("\\begin{document}")
+    return tex[:idx] if idx != -1 else tex
+
+
+def extract_header(tex):
+    start = tex.find("\\begin{center}")
+    end = tex.find("\\end{center}")
+    if start == -1 or end == -1:
+        return ""
+    return tex[start : end + len("\\end{center}")]
+
+
+def extract_section_names(tex):
+    return re.findall(r"\\section\{([^}]*)\}", tex)
+
+
+def extract_skill_tokens(tex):
+    match = re.search(r"\\section\{Technical Skills\}(.*?)\\end\{itemize\}", tex, re.DOTALL)
+    if not match:
+        return set()
+    body = match.group(1)
+    body = re.sub(r"\\textbf\{([^}]*)\}", r"\1", body)  # keep category label text for stopword matching
+    body = body.replace("\\\\", ",")
+    body = re.sub(r"[\\{}]", " ", body)
+    tokens = re.split(r"[,:]", body)
+    cleaned = {t.strip() for t in tokens if t.strip()}
+    return {t for t in cleaned if t.lower() not in SKILL_TOKEN_STOPWORDS and len(t) > 1}
+
+
+def extract_project_urls(tex):
+    match = re.search(r"\\section\{Projects\}(.*?)(?=\\section\{|\Z)", tex, re.DOTALL)
+    if not match:
+        return set()
+    return set(re.findall(r"https://github\.com/\S+?(?=[}\s])", match.group(1)))
+
+
+def validate_structure(old_tex, new_tex, source_haystack, known_repo_urls):
+    """Mechanically checks the model's output against the hard rules given
+    in the prompt. Returns a list of human-readable problems; an empty list
+    means the output is safe to accept."""
+    problems = []
+
+    if extract_preamble(old_tex) != extract_preamble(new_tex):
+        problems.append("The LaTeX preamble (before \\begin{document}) was modified.")
+
+    if extract_header(old_tex) != extract_header(new_tex):
+        problems.append("The contact-info header block was modified.")
+
+    new_sections = extract_section_names(new_tex)
+    if new_sections != EXPECTED_SECTIONS:
+        problems.append(
+            f"Section list changed from {EXPECTED_SECTIONS} to {new_sections}."
+        )
+
+    old_skills = extract_skill_tokens(old_tex)
+    new_skills = extract_skill_tokens(new_tex)
+    added_skills = new_skills - old_skills
+    haystack_lower = source_haystack.lower()
+    unverified_skills = [s for s in added_skills if s.lower() not in haystack_lower]
+    if unverified_skills:
+        problems.append(
+            "New Technical Skills entries with no match anywhere in the fetched "
+            f"GitHub data (likely fabricated): {unverified_skills}"
+        )
+
+    new_project_urls = extract_project_urls(new_tex)
+    bad_urls = [u for u in new_project_urls if u.rstrip("/") not in known_repo_urls]
+    if bad_urls:
+        problems.append(
+            f"Project link(s) not found among this account's actual repos: {bad_urls}"
+        )
+
+    return problems
 
 
 class ModelUnavailable(Exception):
@@ -292,7 +403,17 @@ def main():
 
     updated_tex = updated_tex.strip() + "\n"
     changed = updated_tex != current_tex.strip() + "\n"
+
     if changed:
+        known_repo_urls = {r["url"].rstrip("/") for r in repo_summaries}
+        problems = validate_structure(current_tex, updated_tex, user, known_repo_urls)
+        if problems:
+            print("Rejecting model output — it broke a hard rule:", file=sys.stderr)
+            for p in problems:
+                print(f"  - {p}", file=sys.stderr)
+            print("Leaving the resume unchanged for this run.", file=sys.stderr)
+            sys.exit(1)
+
         with open(RESUME_PATH, "w", encoding="utf-8") as f:
             f.write(updated_tex)
         print("Resume updated.")

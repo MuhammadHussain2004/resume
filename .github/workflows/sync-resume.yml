@@ -4,7 +4,12 @@ on:
   schedule:
     # 03:00 UTC daily = 08:00 PKT
     - cron: "0 3 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      skip_ai:
+        description: "Skip Gemini analysis, just recompile the PDF from the current .tex (use after a manual .tex edit)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -25,11 +30,16 @@ jobs:
         run: pip install -r scripts/requirements.txt
 
       - name: Analyze GitHub activity and refresh resume
+        if: github.event.inputs.skip_ai != 'true'
         env:
           GH_READ_TOKEN: ${{ secrets.GH_READ_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_USERNAME: MuhammadHussain2004
         run: python scripts/sync_resume.py
+
+      - name: Force recompile (manual .tex edit)
+        if: github.event.inputs.skip_ai == 'true'
+        run: echo "RESUME_CHANGED=true" >> "$GITHUB_ENV"
 
       - name: Compile PDF
         if: env.RESUME_CHANGED == 'true'
@@ -43,5 +53,9 @@ jobs:
           git config user.name "resume-sync-bot"
           git config user.email "actions@users.noreply.github.com"
           git add Muhammad_Hussain_Resume.tex Muhammad_Hussain_Resume.pdf
-          git commit -m "chore: auto-sync resume with latest GitHub activity"
+          if [ "${{ github.event.inputs.skip_ai }}" = "true" ]; then
+            git commit -m "chore: recompile PDF from manually edited resume"
+          else
+            git commit -m "chore: auto-sync resume with latest GitHub activity"
+          fi
           git push
