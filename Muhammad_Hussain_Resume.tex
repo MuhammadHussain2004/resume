@@ -34,14 +34,21 @@
 % NOTE ON ATS TEXT EXTRACTION: \scshape (small caps) corrupts copy/paste
 % text extraction in this font (splits words with spurious spaces), so
 % section headings use plain bold instead. The default itemize bullet
-% glyph and \fill-glue-based table alignment both extract with no
-% space/wrong characters (empirically verified with pypdf) regardless of
-% forced minimum gaps, because glue produces no real character in the
-% content stream for an extractor to find. Fixed by (a) using a literal
-% hyphen character for bullets instead of the symbol-font bullet glyph,
-% and (b) building the heading lines with \hfill inside a single
-% paragraph line instead of a tabular*, which keeps left+right text in
-% one continuous text run that extracts with a real space between them.
+% glyph has no proper Unicode mapping and extracts as U+FFFD, so bullets
+% use a literal hyphen instead (a real, unambiguous character).
+%
+% Known remaining limitation: the tabular*-based heading lines below
+% (institution/project name + right-aligned date or links) can extract
+% with no space at the column boundary for longer headings (e.g.
+% "ProgramCertificate"), because \extracolsep{\fill} is pure glue with
+% no character for a text extractor to find, and no glue-based fix
+% (\hspace, \hfill) changes that (verified empirically — \hfill also
+% broke the vertical spacing of Certifications entries with no bullet
+% list below them, so it was reverted). This only affects the added
+% link labels ("Certificate", "Verify", "GitHub") merging with the
+% adjacent institution/project name, not any real resume keyword
+% content — every skill, bullet point, date, and section heading
+% extracts correctly.
 \titleformat{\section}{
   \vspace{-4pt}\raggedright\large\bfseries
 }{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
@@ -52,15 +59,17 @@
 
 \newcommand{\resumeSubheading}[4]{
   \vspace{-2pt}\item
-    \textbf{#1} \hfill #2 \\
-    \textit{\small#3} \hfill \textit{\small #4} \\
-    \vspace{-7pt}
+    \begin{tabular*}{0.98\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
 }
 
 \newcommand{\resumeProjectHeading}[2]{
     \item
-    \small#1 \hfill #2 \\
-    \vspace{-7pt}
+    \begin{tabular*}{0.98\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
 }
 
 \newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
