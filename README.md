@@ -12,8 +12,8 @@ Activity → Run workflow**), a job:
    special profile README (if any), and all owner repos (description,
    topics, languages, README excerpt, stars, last-pushed date).
 2. Sends that snapshot plus the current resume `.tex` to Gemini, with
-   instructions that **any** section — Summary, Education, Certifications,
-   Experience, Projects, Technical Skills — may be updated, but only where
+   instructions that **any** section — Summary, Experience, Projects,
+   Education, Certifications, Technical Skills — may be updated, but only where
    the GitHub data gives clear, unambiguous evidence for that specific
    change. A section with no supporting evidence is left untouched; nothing
    is fabricated, and the contact header is never touched.
@@ -39,7 +39,7 @@ allowed to touch the repo:
 - The contact-info header (name/phone/email/links) must come back
   byte-for-byte identical.
 - The resume must still have exactly six sections, in the same order:
-  Summary, Education, Certifications, Experience, Projects, Technical Skills.
+  Summary, Experience, Projects, Education, Certifications, Technical Skills.
 - Every *new* Technical Skills entry must appear verbatim (case-insensitive)
   somewhere in the fetched GitHub data (a repo description, README, topic,
   or language) — if it can't be traced back to real data, the run is

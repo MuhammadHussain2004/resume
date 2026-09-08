@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
 Analyzes the GitHub account (repos, profile bio, profile README) and asks
-Gemini to refresh ANY resume section — Summary, Education, Certifications,
-Experience, Projects, Technical Skills — wherever the GitHub data gives clear,
-unambiguous evidence of a change. Only overwrites the .tex file if Gemini
+Gemini to refresh ANY resume section — Summary, Experience, Projects,
+Education, Certifications, Technical Skills — wherever the GitHub data gives
+clear, unambiguous evidence of a change. Only overwrites the .tex file if Gemini
 actually returns a materially different document; the caller (the GitHub
 Actions workflow) decides whether to recompile the PDF and commit.
 """
@@ -169,8 +169,8 @@ def build_prompt(resume_tex, profile, repo_summaries):
         "contact-info block (name/phone/email/links/location) exactly as "
         "given. Never change it.\n"
         "- Keep exactly these six \\section{} commands, in this order, and "
-        "no others: Summary, Education, Certifications, Experience, "
-        "Projects, Technical Skills.\n"
+        "no others: Summary, Experience, Projects, Education, "
+        "Certifications, Technical Skills.\n"
         "- Every new fact you add to Technical Skills (a language, "
         "framework, tool, or platform not already present) MUST appear "
         "verbatim (case-insensitive) somewhere in the GITHUB PROFILE or "
@@ -228,10 +228,10 @@ def strip_code_fences(text):
 
 EXPECTED_SECTIONS = [
     "Summary",
-    "Education",
-    "Certifications",
     "Experience",
     "Projects",
+    "Education",
+    "Certifications",
     "Technical Skills",
 ]
 
