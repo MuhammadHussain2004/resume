@@ -31,8 +31,17 @@
 \raggedright
 \setlength{\tabcolsep}{0in}
 
+% NOTE ON ATS TEXT EXTRACTION: \scshape (small caps) and the default
+% itemize bullet glyph both corrupt copy/paste text extraction in this
+% font (small caps splits words with spurious spaces; the bullet glyph
+% has no proper Unicode mapping and extracts as U+FFFD). Section
+% headings use plain bold instead, and bullets use a literal en-dash
+% (part of the regular T1-encoded text font, confirmed to extract
+% cleanly) rather than \textbullet. The heading tables also force a
+% minimum real gap between columns so long headings don't collapse the
+% two columns' text together with zero space in extracted text.
 \titleformat{\section}{
-  \vspace{-4pt}\scshape\raggedright\large\bfseries
+  \vspace{-4pt}\raggedright\large\bfseries
 }{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
 
 \newcommand{\resumeItem}[1]{
@@ -41,7 +50,7 @@
 
 \newcommand{\resumeSubheading}[4]{
   \vspace{-2pt}\item
-    \begin{tabular*}{0.98\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \begin{tabular*}{0.98\textwidth}[t]{l@{\extracolsep{\fill}\hspace{8pt}}r}
       \textbf{#1} & #2 \\
       \textit{\small#3} & \textit{\small #4} \\
     \end{tabular*}\vspace{-7pt}
@@ -49,7 +58,7 @@
 
 \newcommand{\resumeProjectHeading}[2]{
     \item
-    \begin{tabular*}{0.98\textwidth}{l@{\extracolsep{\fill}}r}
+    \begin{tabular*}{0.98\textwidth}{l@{\extracolsep{\fill}\hspace{8pt}}r}
       \small#1 & #2 \\
     \end{tabular*}\vspace{-7pt}
 }
@@ -57,7 +66,7 @@
 \newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.18in]}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.18in, label=\textbf{--}]}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
 
 \begin{document}
@@ -141,7 +150,7 @@
       {Sindh Madressatul Islam University}{Sep 2022 - Jun 2026}
       {Bachelor of Science in Computer Science; CGPA: 3.7/4.0}{Karachi, Pakistan}
       \resumeItemListStart
-        \resumeItem{\textbf{Relevant Coursework:} Data Structures, Object-Oriented Programming, Database Systems, Software Engineering, Computer Networks, Operating Systems, Mobile App Development}
+        \resumeItem{\textbf{Relevant Coursework}: Data Structures, Object-Oriented Programming, Database Systems, Software Engineering, Computer Networks, Operating Systems, Mobile App Development}
       \resumeItemListEnd
   \resumeSubHeadingListEnd
 
