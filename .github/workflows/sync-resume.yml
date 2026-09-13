@@ -59,3 +59,11 @@ jobs:
             git commit -m "chore: auto-sync resume with latest GitHub activity"
           fi
           git push
+
+      - name: Upload latest PDF to Google Drive
+        env:
+          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+          GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
+        run: python scripts/upload_to_gdrive.py Muhammad_Hussain_Resume.pdf
