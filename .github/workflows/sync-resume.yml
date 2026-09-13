@@ -59,12 +59,3 @@ jobs:
             git commit -m "chore: auto-sync resume with latest GitHub activity"
           fi
           git push
-
-      - name: Upload Resume to Google Drive
-        if: env.RESUME_CHANGED == 'true'
-        uses: adityak74/google-drive-upload-action@main
-        with:
-          credentials: ${{ secrets.GDRIVE_CREDENTIALS }}
-          filename: "Muhammad_Hussain_Resume.pdf"
-          folderId: ${{ secrets.GDRIVE_FOLDER_ID }}
-          overwrite: "true"
