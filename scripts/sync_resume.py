@@ -23,6 +23,7 @@ GH_READ_TOKEN = os.environ["GH_READ_TOKEN"]
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 RESUME_PATH = os.environ.get("RESUME_TEX_PATH", "Muhammad_Hussain_Resume.tex")
 MAX_REPOS = int(os.environ.get("MAX_REPOS", "20"))
+USER_EXCLUDED_SKILLS = {"php", "shell", "framer motion"}
 
 GITHUB_API = "https://api.github.com"
 GH_HEADERS = {
@@ -116,6 +117,7 @@ def fetch_repo_summaries():
         params={"per_page": 100, "sort": "pushed", "direction": "desc", "type": "owner"},
     )
     repos = [r for r in repos if not r.get("fork") and r["name"] != GITHUB_USERNAME]
+    known_repo_urls = {r["html_url"].rstrip("/") for r in repos}
     repos = repos[:MAX_REPOS]
 
     summaries = []
@@ -148,7 +150,7 @@ def fetch_repo_summaries():
                 "readme_excerpt": readme_excerpt,
             }
         )
-    return summaries
+    return summaries, known_repo_urls
 
 
 def build_prompt(resume_tex, profile, repo_summaries):
@@ -200,6 +202,9 @@ def build_prompt(resume_tex, profile, repo_summaries):
         "- Technical Skills: merge in genuinely new languages/frameworks "
         "seen across repos; do not remove skills just because a repo aged "
         "out of the top list.\n"
+        "- User-declared skill exclusions override repository detection. "
+        "Never add PHP, Shell, or Framer Motion to Technical Skills; their "
+        "presence in a repository does not represent claimed proficiency.\n"
         "- Education/Certifications/Experience: only add or edit an entry "
         "if the profile bio or profile README explicitly states something "
         "new (e.g. a newly listed certification, a new job/role, a new "
@@ -310,6 +315,12 @@ def validate_structure(old_tex, new_tex, source_haystack, known_repo_urls):
             f"GitHub data (likely fabricated): {unverified_skills}"
         )
 
+    excluded_skills = [s for s in new_skills if s.lower() in USER_EXCLUDED_SKILLS]
+    if excluded_skills:
+        problems.append(
+            f"User-declared excluded skills were added: {excluded_skills}"
+        )
+
     new_project_urls = extract_project_urls(new_tex)
     bad_urls = [u for u in new_project_urls if u.rstrip("/") not in known_repo_urls]
     if bad_urls:
@@ -371,7 +382,7 @@ def main():
     print(f"Gemini model candidates (best first): {model_candidates}")
 
     profile = fetch_profile()
-    repo_summaries = fetch_repo_summaries()
+    repo_summaries, known_repo_urls = fetch_repo_summaries()
     system, user = build_prompt(current_tex, profile, repo_summaries)
 
     raw_output = None
@@ -399,20 +410,19 @@ def main():
     if not updated_tex.strip().startswith("\\documentclass"):
         print("Model output did not look like a valid .tex file; skipping update.", file=sys.stderr)
         print(updated_tex[:2000], file=sys.stderr)
-        sys.exit(1)
+        return
 
     updated_tex = updated_tex.strip() + "\n"
     changed = updated_tex != current_tex.strip() + "\n"
 
     if changed:
-        known_repo_urls = {r["url"].rstrip("/") for r in repo_summaries}
         problems = validate_structure(current_tex, updated_tex, user, known_repo_urls)
         if problems:
             print("Rejecting model output — it broke a hard rule:", file=sys.stderr)
             for p in problems:
                 print(f"  - {p}", file=sys.stderr)
             print("Leaving the resume unchanged for this run.", file=sys.stderr)
-            sys.exit(1)
+            return
 
         with open(RESUME_PATH, "w", encoding="utf-8") as f:
             f.write(updated_tex)
