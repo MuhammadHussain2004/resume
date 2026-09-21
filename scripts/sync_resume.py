@@ -179,9 +179,16 @@ def build_prompt(resume_tex, profile, repo_summaries, selected_project_urls):
         "- Technical Skills: merge in genuinely new languages/frameworks "
         "seen across repos; do not remove skills just because a repo aged "
         "out of the top list.\n"
-        "- User-declared skill exclusions override repository detection. "
-        "Never add PHP, Shell, or Framer Motion to Technical Skills; their "
-        "presence in a repository does not represent claimed proficiency.\n"
+        "- User-declared skill exclusions override repository detection and "
+        "apply to the entire resume, including project bullets. Never mention "
+        "or claim PHP, Shell, or Framer Motion anywhere; their presence in a "
+        "repository does not represent claimed proficiency.\n"
+        "- Rewrite every selected project's title and bullets from that repo's "
+        "own detected technologies, capabilities, feature domains, README, and "
+        "evidence files. Do not carry an old technology claim into a retained "
+        "project when its current repository evidence does not support it. Only "
+        "label a project MERN when MongoDB, Express, React, and Node.js are all "
+        "evidenced for that same repository.\n"
         "- Education/Certifications/Experience: only add or edit an entry "
         "if the profile bio or profile README explicitly states something "
         "new (e.g. a newly listed certification, a new job/role, a new "
@@ -304,6 +311,16 @@ def validate_structure(
     if excluded_skills:
         problems.append(
             f"User-declared excluded skills were added: {excluded_skills}"
+        )
+
+    excluded_claims = [
+        skill
+        for skill in USER_EXCLUDED_SKILLS
+        if re.search(rf"(?<![A-Za-z]){re.escape(skill)}(?![A-Za-z])", new_tex, re.IGNORECASE)
+    ]
+    if excluded_claims:
+        problems.append(
+            f"User-declared excluded skills appear in the resume: {sorted(excluded_claims)}"
         )
 
     new_project_urls = extract_project_urls(new_tex)
