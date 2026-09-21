@@ -44,6 +44,12 @@ SOURCE_EXTENSIONS = {
     ".php", ".vue", ".svelte", ".html", ".css", ".scss", ".sql",
 }
 
+CODE_EVIDENCE_EXTENSIONS = {
+    ".js", ".jsx", ".ts", ".tsx", ".py", ".java", ".kt", ".kts",
+    ".cs", ".cpp", ".cc", ".c", ".go", ".rs", ".rb", ".php", ".vue",
+    ".svelte", ".sql",
+}
+
 TECHNOLOGIES = {
     "React": ("react", "react-dom"),
     "Next.js": ("next", "nextjs", "next.js"),
@@ -119,6 +125,57 @@ def _contains_any(text: str, terms: tuple[str, ...] | list[str]) -> bool:
 
 def _path_has(paths: list[str], patterns: tuple[str, ...]) -> bool:
     return any(any(pattern in path for pattern in patterns) for path in paths)
+
+
+def select_code_evidence_paths(tree_entries, limit=14):
+    """Choose representative implementation files for grounded resume writing."""
+    candidates = []
+    for entry in tree_entries:
+        if entry.get("type") != "blob":
+            continue
+        path = entry.get("path", "")
+        lower = path.lower()
+        if not any(lower.endswith(ext) for ext in CODE_EVIDENCE_EXTENSIONS):
+            continue
+        if any(
+            excluded in lower
+            for excluded in (
+                "node_modules/", "vendor/", "dist/", "build/", "coverage/",
+                ".min.js", ".bundle.js", "package-lock", "generated/",
+            )
+        ):
+            continue
+        if int(entry.get("size") or 0) > 150_000:
+            continue
+
+        score = 0
+        if _contains_any(lower, ("controller", "service", "model", "schema", "middleware")):
+            score += 10
+        if _contains_any(
+            lower,
+            ("route", "database", "server", "api/", "auth", "payment", "analytics", "recommend", "upload", "order", "product", "complaint"),
+        ):
+            score += 8
+        if _contains_any(lower, ("app.", "index.", "main.", "config", "client")):
+            score += 5
+        if _contains_any(lower, ("pages/", "components/", "hooks/", "store/")):
+            score += 3
+        if re.search(r"(^|/)(test|tests|__tests__|spec)(/|$)|\.(test|spec)\.", lower):
+            score += 2
+        depth = lower.count("/")
+        candidates.append((score, -depth, -len(lower), path))
+
+    candidates.sort(reverse=True)
+    return [item[3] for item in candidates[:limit]]
+
+
+def _redact_sensitive_assignments(text):
+    """Keep code useful to Gemini without forwarding obvious credential values."""
+    return re.sub(
+        r"(?im)^([^\n]*(?:api[_-]?key|client[_-]?secret|password|access[_-]?token)[^:=\n]*[:=]\s*)[^\s,;]+",
+        r"\1<redacted>",
+        text,
+    )
 
 
 def _recency_points(pushed_at: str | None) -> int:
@@ -308,6 +365,7 @@ def analyze_github_repositories(gh_get, username, max_projects=3):
     ]
     known_repo_urls = {repo["html_url"].rstrip("/") for repo in owned_repos}
     summaries = []
+    repo_artifacts = {}
 
     for repo in owned_repos:
         name = repo["name"]
@@ -368,6 +426,10 @@ def analyze_github_repositories(gh_get, username, max_projects=3):
             **analysis,
         }
         summaries.append(summary)
+        repo_artifacts[repo["html_url"].rstrip("/")] = {
+            "tree_entries": tree_entries,
+            "manifest_texts": manifest_texts,
+        }
         print(
             f"  score={analysis['score']} full_stack={analysis['full_stack']} "
             f"source_files={analysis['source_file_count']} capabilities={analysis['capabilities']}"
@@ -388,7 +450,44 @@ def analyze_github_repositories(gh_get, username, max_projects=3):
     selected_rank = {item["url"].rstrip("/"): rank for rank, item in enumerate(selected, 1)}
 
     for summary in summaries:
-        summary["resume_rank"] = selected_rank.get(summary["url"].rstrip("/"))
+        normalized_url = summary["url"].rstrip("/")
+        summary["resume_rank"] = selected_rank.get(normalized_url)
+        if summary["resume_rank"] is None:
+            continue
+
+        artifacts = repo_artifacts[normalized_url]
+        evidence_paths = select_code_evidence_paths(artifacts["tree_entries"])
+        code_evidence = []
+        evidence_chars = 0
+        for path in evidence_paths:
+            content = _fetch_text(
+                lambda api_path, params=None: gh_get(api_path.replace("{owner}", username), params=params),
+                summary["name"],
+                path,
+            )
+            if not content.strip():
+                continue
+            excerpt = _redact_sensitive_assignments(content[:3500])
+            remaining = 24_000 - evidence_chars
+            if remaining <= 0:
+                break
+            excerpt = excerpt[:remaining]
+            code_evidence.append({"path": path, "excerpt": excerpt})
+            evidence_chars += len(excerpt)
+
+        manifest_evidence = {}
+        manifest_chars = 0
+        for path, content in artifacts["manifest_texts"].items():
+            if not content.strip():
+                continue
+            remaining = 15_000 - manifest_chars
+            if remaining <= 0:
+                break
+            excerpt = _redact_sensitive_assignments(content[: min(5000, remaining)])
+            manifest_evidence[path] = excerpt
+            manifest_chars += len(excerpt)
+        summary["dependency_manifest_evidence"] = manifest_evidence
+        summary["code_evidence"] = code_evidence
 
     summaries.sort(
         key=lambda item: (

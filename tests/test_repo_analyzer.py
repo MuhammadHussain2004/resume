@@ -1,6 +1,6 @@
 import unittest
 
-from scripts.repo_analyzer import analyze_repository
+from scripts.repo_analyzer import analyze_repository, select_code_evidence_paths
 
 
 class RepositoryRankingSignalsTest(unittest.TestCase):
@@ -62,6 +62,21 @@ class RepositoryRankingSignalsTest(unittest.TestCase):
             {"TypeScript": 100},
         )
         self.assertFalse(result["eligible"])
+
+    def test_code_evidence_prioritizes_implementation_files(self):
+        tree = [
+            {"type": "blob", "path": "frontend/src/styles.css", "size": 1000},
+            {"type": "blob", "path": "backend/src/controllers/orderController.js", "size": 3000},
+            {"type": "blob", "path": "backend/src/routes/orders.js", "size": 2000},
+            {"type": "blob", "path": "frontend/src/pages/Checkout.jsx", "size": 2000},
+            {"type": "blob", "path": "dist/app.bundle.js", "size": 2000},
+        ]
+
+        selected = select_code_evidence_paths(tree, limit=3)
+
+        self.assertEqual(selected[0], "backend/src/controllers/orderController.js")
+        self.assertIn("backend/src/routes/orders.js", selected)
+        self.assertNotIn("dist/app.bundle.js", selected)
 
 
 if __name__ == "__main__":
