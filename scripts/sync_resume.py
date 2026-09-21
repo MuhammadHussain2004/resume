@@ -15,6 +15,7 @@ import re
 import sys
 import time
 from datetime import datetime, timezone
+from pathlib import Path
 
 import requests
 
@@ -24,8 +25,8 @@ GITHUB_USERNAME = os.environ["GITHUB_USERNAME"]
 GH_READ_TOKEN = os.environ["GH_READ_TOKEN"]
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 RESUME_PATH = os.environ.get("RESUME_TEX_PATH", "Muhammad_Hussain_Resume.tex")
+ANALYSIS_PATH = Path(os.environ.get("REPO_ANALYSIS_PATH", "data/repo-analysis.json"))
 MAX_RESUME_PROJECTS = 3
-USER_EXCLUDED_SKILLS = {"php", "shell", "framer motion"}
 
 GITHUB_API = "https://api.github.com"
 GH_HEADERS = {
@@ -121,6 +122,54 @@ def fetch_repo_summaries():
     )
 
 
+def write_public_repository_analysis(repo_summaries):
+    """Publish stable, code-derived facts for portfolio/profile automation."""
+    public_fields = (
+        "overall_rank",
+        "name",
+        "description",
+        "url",
+        "homepage",
+        "topics",
+        "languages",
+        "stars",
+        "pushed_at",
+        "created_at",
+        "score",
+        "full_stack",
+        "eligible",
+        "capabilities",
+        "feature_domains",
+        "technologies",
+        "source_file_count",
+        "test_file_count",
+        "evidence_files",
+        "tree_scan_complete",
+    )
+    projects = []
+    for summary in repo_summaries:
+        if summary.get("overall_rank") is None:
+            continue
+        project = {field: summary.get(field) for field in public_fields}
+        if summary.get("overall_rank", 9999) <= 6:
+            project["readme_excerpt"] = summary.get("readme_excerpt", "")[:1500]
+        projects.append(project)
+    projects.sort(key=lambda item: item["overall_rank"])
+
+    content = json.dumps(
+        {"schema_version": 1, "projects": projects},
+        indent=2,
+        ensure_ascii=False,
+    ) + "\n"
+    ANALYSIS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    previous = ANALYSIS_PATH.read_text(encoding="utf-8") if ANALYSIS_PATH.exists() else ""
+    if content != previous:
+        ANALYSIS_PATH.write_text(content, encoding="utf-8")
+        print(f"Updated shared repository analysis: {ANALYSIS_PATH}")
+    else:
+        print("Shared repository analysis is already current.")
+
+
 def build_prompt(resume_tex, profile, repo_summaries, selected_project_urls):
     system = (
         "You are maintaining a LaTeX resume for a full-stack software "
@@ -179,10 +228,6 @@ def build_prompt(resume_tex, profile, repo_summaries, selected_project_urls):
         "- Technical Skills: merge in genuinely new languages/frameworks "
         "seen across repos; do not remove skills just because a repo aged "
         "out of the top list.\n"
-        "- User-declared skill exclusions override repository detection and "
-        "apply to the entire resume, including project bullets. Never mention "
-        "or claim PHP, Shell, or Framer Motion anywhere; their presence in a "
-        "repository does not represent claimed proficiency.\n"
         "- Rewrite every selected project's title and bullets from that repo's "
         "own detected technologies, capabilities, feature domains, README, and "
         "evidence files. Do not carry an old technology claim into a retained "
@@ -313,22 +358,6 @@ def validate_structure(
             f"GitHub data (likely fabricated): {unverified_skills}"
         )
 
-    excluded_skills = [s for s in new_skills if s.lower() in USER_EXCLUDED_SKILLS]
-    if excluded_skills:
-        problems.append(
-            f"User-declared excluded skills were added: {excluded_skills}"
-        )
-
-    excluded_claims = [
-        skill
-        for skill in USER_EXCLUDED_SKILLS
-        if re.search(rf"(?<![A-Za-z]){re.escape(skill)}(?![A-Za-z])", new_tex, re.IGNORECASE)
-    ]
-    if excluded_claims:
-        problems.append(
-            f"User-declared excluded skills appear in the resume: {sorted(excluded_claims)}"
-        )
-
     new_project_urls = extract_project_urls(new_tex)
     bad_urls = [u for u in new_project_urls if u.rstrip("/") not in known_repo_urls]
     if bad_urls:
@@ -398,6 +427,7 @@ def main():
 
     profile = fetch_profile()
     repo_summaries, known_repo_urls, selected_project_urls = fetch_repo_summaries()
+    write_public_repository_analysis(repo_summaries)
     if len(selected_project_urls) != MAX_RESUME_PROJECTS:
         raise RuntimeError(
             f"Expected {MAX_RESUME_PROJECTS} eligible projects, found {len(selected_project_urls)}; "

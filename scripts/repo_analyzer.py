@@ -448,11 +448,15 @@ def analyze_github_repositories(gh_get, username, max_projects=3):
     selected = ranked[:max_projects]
     selected_urls = {item["url"].rstrip("/") for item in selected}
     selected_rank = {item["url"].rstrip("/"): rank for rank, item in enumerate(selected, 1)}
+    overall_rank = {
+        item["url"].rstrip("/"): rank for rank, item in enumerate(ranked, 1)
+    }
 
     for summary in summaries:
         normalized_url = summary["url"].rstrip("/")
         summary["resume_rank"] = selected_rank.get(normalized_url)
-        if summary["resume_rank"] is None:
+        summary["overall_rank"] = overall_rank.get(normalized_url)
+        if summary["overall_rank"] is None or summary["overall_rank"] > 6:
             continue
 
         artifacts = repo_artifacts[normalized_url]
@@ -491,7 +495,8 @@ def analyze_github_repositories(gh_get, username, max_projects=3):
 
     summaries.sort(
         key=lambda item: (
-            item["resume_rank"] is not None,
+            item["overall_rank"] is not None,
+            -(item["overall_rank"] or 9999),
             item["full_stack"],
             item["score"],
             item.get("pushed_at") or "",

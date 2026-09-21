@@ -1,6 +1,11 @@
 name: Sync Resume with GitHub Activity
 
 on:
+  push:
+    branches: [master]
+    paths:
+      - "Muhammad_Hussain_Resume.tex"
+      - "scripts/**"
   schedule:
     # 03:00 UTC daily = 08:00 PKT
     - cron: "0 3 * * *"
@@ -37,6 +42,15 @@ jobs:
           GITHUB_USERNAME: MuhammadHussain2004
         run: python scripts/sync_resume.py
 
+      - name: Detect shared analysis changes
+        if: github.event.inputs.skip_ai != 'true'
+        run: |
+          if git diff --quiet -- data/repo-analysis.json; then
+            echo "ANALYSIS_CHANGED=false" >> "$GITHUB_ENV"
+          else
+            echo "ANALYSIS_CHANGED=true" >> "$GITHUB_ENV"
+          fi
+
       - name: Force recompile (manual .tex edit)
         if: github.event.inputs.skip_ai == 'true'
         run: echo "RESUME_CHANGED=true" >> "$GITHUB_ENV"
@@ -48,11 +62,11 @@ jobs:
           root_file: Muhammad_Hussain_Resume.tex
 
       - name: Commit and push updated resume
-        if: env.RESUME_CHANGED == 'true'
+        if: env.RESUME_CHANGED == 'true' || env.ANALYSIS_CHANGED == 'true'
         run: |
           git config user.name "resume-sync-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add Muhammad_Hussain_Resume.tex Muhammad_Hussain_Resume.pdf
+          git add Muhammad_Hussain_Resume.tex Muhammad_Hussain_Resume.pdf data/repo-analysis.json
           if [ "${{ github.event.inputs.skip_ai }}" = "true" ]; then
             git commit -m "chore: recompile PDF from manually edited resume"
           else
@@ -67,3 +81,10 @@ jobs:
           GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
           GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
         run: python scripts/upload_to_gdrive.py Muhammad_Hussain_Resume.pdf
+
+      - name: Trigger portfolio and profile synchronization
+        env:
+          GH_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
+        run: |
+          gh api --method POST repos/MuhammadHussain2004/My-Portfolio/dispatches -f event_type=resume_updated
+          gh api --method POST repos/MuhammadHussain2004/MuhammadHussain2004/dispatches -f event_type=resume_updated

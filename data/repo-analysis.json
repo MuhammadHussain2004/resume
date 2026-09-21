@@ -1,0 +1,1148 @@
+{
+  "schema_version": 1,
+  "projects": [
+    {
+      "overall_rank": 1,
+      "name": "Complain-Management-System-MERN",
+      "description": "Role-based complaint management platform (MERN) with JWT auth, an admin approval workflow, and a full complaint lifecycle.",
+      "url": "https://github.com/MuhammadHussain2004/Complain-Management-System-MERN",
+      "homepage": "https://scms-frontend-rho.vercel.app",
+      "topics": [
+        "featured",
+        "mern-stack"
+      ],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-09-01T12:30:54Z",
+      "created_at": "2026-09-01T05:41:03Z",
+      "score": 94,
+      "full_stack": true,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "backend",
+        "database",
+        "API layer",
+        "authentication/authorization",
+        "deployment",
+        "security/validation",
+        "separated frontend/backend architecture"
+      ],
+      "feature_domains": [
+        "administration",
+        "analytics",
+        "email/notifications",
+        "reviews/feedback",
+        "roles/permissions",
+        "search/filtering",
+        "third-party integration",
+        "workflow/state machine"
+      ],
+      "technologies": [
+        "Express",
+        "JWT",
+        "Mongoose",
+        "Node.js",
+        "OAuth",
+        "React",
+        "Vite"
+      ],
+      "source_file_count": 67,
+      "test_file_count": 0,
+      "evidence_files": [
+        "backend/package.json",
+        "frontend/package.json"
+      ],
+      "tree_scan_complete": true,
+      "readme_excerpt": "# Smart Complaint Management System (MERN Stack)\n\nA centralized complaint management platform for an educational institution. Users register, wait for\nadmin approval, log in through a single login page, submit complaints, and track their status. Admins\nmanage users (approve/reject/activate/deactivate/roles) and manage the full complaint lifecycle.\n\n## Stack\n\n- **Frontend:** React (Vite, JSX) + React Router + Axios\n- **Backend:** Node.js + Express.js\n- **Database:** MongoDB + Mongoose\n- **Auth:** JWT + bcrypt password hashing, role-based route protection\n\n## Project Structure\n\n```\nHackathon/\n  backend/     Express API (auth, users, complaints)\n  frontend/    React app (Vite)\n```\n\n## Complaint Workflow\n\n```\nSubmit Complaint → Pending → Admin Review → In Progress → Resolved / Rejected\n```\n\n## Account Workflow\n\n```\nRegister → status: pending → Admin Approve/Reject → Login (role detected) → User/Admin Dashboard\n```\n\nA new registration is always a `user` with `pending` status — it can never self-promote to admin.\nThe first admin account is created via the seed script below.\n\n## Backend Setup\n\n```bash\ncd backend\nnpm install\ncp .env.example .env      # then edit MONGO_URI and JWT_SECRET\nnpm run seed:admin        # creates the initial admin account from .env\nnpm run dev                # starts on http://localhost:5000\n```\n\nInitial admin credentials are controlled by `ADMIN_EMAIL` / `ADMIN_PASSWORD` in `.env`\n(defaults: `admin@scms.com` / `Admin@12345` — change these before using the a"
+    },
+    {
+      "overall_rank": 2,
+      "name": "MuhammadHussain-mern-10pshine",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/MuhammadHussain-mern-10pshine",
+      "homepage": "https://muhammad-hussain-mern-10pshine.vercel.app",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-09-04T13:59:02Z",
+      "created_at": "2026-04-13T11:14:51Z",
+      "score": 94,
+      "full_stack": true,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "backend",
+        "database",
+        "API layer",
+        "authentication/authorization",
+        "automated testing",
+        "deployment",
+        "security/validation",
+        "separated frontend/backend architecture"
+      ],
+      "feature_domains": [
+        "administration",
+        "catalog/commerce",
+        "content/data management",
+        "email/notifications",
+        "third-party integration"
+      ],
+      "technologies": [
+        "Express",
+        "JWT",
+        "Jest",
+        "MySQL",
+        "Node.js",
+        "React"
+      ],
+      "source_file_count": 30,
+      "test_file_count": 6,
+      "evidence_files": [
+        "backend/package.json",
+        "frontend/package.json"
+      ],
+      "tree_scan_complete": true,
+      "readme_excerpt": "# MuhammadHussain-mern-10pshine\n\nA MERN notes application with backend and frontend components.\n\n## Project structure\n\n- `backend/` — Express API, MySQL database, authentication, notes logic\n- `frontend/` — React app for login, register, dashboard, and notes management\n\n## Run locally\n\n1. Start backend:\n   - `cd backend`\n   - `npm install`\n   - Copy `.env.example` to `.env` and fill in your MySQL credentials (the app auto-creates the database and tables on first run)\n   - `npm start`\n\n2. Start frontend:\n   - `cd frontend`\n   - `npm install`\n   - `npm start`\n\n## Deploying to Vercel (backend + frontend)\n\nBoth the backend and frontend can be deployed as separate Vercel projects.\n\n### Backend\n\n1. In Vercel, add the **TiDB Cloud** integration (Marketplace → TiDB Cloud) to provision a free MySQL-compatible database — this automatically injects `TIDB_HOST`, `TIDB_PORT`, `TIDB_USER`, `TIDB_PASSWORD`, and `TIDB_DATABASE` into your project's environment variables.\n2. Create a new Vercel project from this repo with **Root Directory** set to `backend`.\n3. Add these additional environment variables in the Vercel project settings: `JWT_SECRET`, `EMAIL_USER`, `EMAIL_PASS`, `BYPASS_EMAIL`.\n4. Deploy. The API will be served at `https://<your-backend-project>.vercel.app/api/...`.\n\n### Frontend\n\n1. Create a Vercel project from this repo with **Root Directory** set to `frontend`.\n2. Set the environment variable `REACT_APP_API_URL` to `https://<your-backend-project>.vercel.app/api`.\n3. Deploy (or"
+    },
+    {
+      "overall_rank": 3,
+      "name": "buildbot",
+      "description": "PC-build recommendation SaaS with a deterministic compatibility engine, a WordPress/WooCommerce plugin, and a store-owner dashboard (Final Year Project).",
+      "url": "https://github.com/MuhammadHussain2004/buildbot",
+      "homepage": "https://buildvolt.online",
+      "topics": [
+        "featured"
+      ],
+      "languages": [
+        "HTML",
+        "JavaScript",
+        "PHP",
+        "CSS",
+        "Python",
+        "PowerShell"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-07-02T22:12:10Z",
+      "created_at": "2026-06-30T08:04:44Z",
+      "score": 92,
+      "full_stack": true,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "backend",
+        "database",
+        "API layer",
+        "authentication/authorization",
+        "deployment",
+        "security/validation",
+        "separated frontend/backend architecture"
+      ],
+      "feature_domains": [
+        "administration",
+        "analytics",
+        "catalog/commerce",
+        "email/notifications",
+        "payments/subscriptions",
+        "recommendation engine",
+        "third-party integration",
+        "uploads/imports"
+      ],
+      "technologies": [
+        "Express",
+        "JWT",
+        "Node.js",
+        "OAuth",
+        "SQLite",
+        "Turso/libSQL",
+        "Vite"
+      ],
+      "source_file_count": 31,
+      "test_file_count": 0,
+      "evidence_files": [
+        "dashboard/package.json",
+        "server/package.json"
+      ],
+      "tree_scan_complete": true,
+      "readme_excerpt": "# BuildBot\n\nBuildBot is an AI-powered product recommendation widget designed for e-commerce stores. It seamlessly integrates into store websites to provide shoppers with personalized product recommendations (like PC builds) based on their budget, purpose, and preferences.\n\n## 🚀 Features\n\n*   **AI Recommendation Engine:** Utilizes advanced AI (Anthropic Claude) to generate accurate and personalized product recommendations based on store catalogs.\n*   **WooCommerce Integration:** Comes with a dedicated WordPress/WooCommerce plugin for seamless product syncing, real-time catalog updates, and automated widget injection.\n*   **Custom Store Support:** Provides a manual catalog mode with CSV upload functionality, allowing integration with any e-commerce platform.\n*   **Store Owner Dashboard:** A comprehensive, vanilla JS dashboard for store owners to:\n    *   Manage product catalogs.\n    *   Customize widget appearance (branding, messaging, colors).\n    *   View detailed recommendation analytics and insights.\n    *   Manage billing and subscriptions.\n*   **Admin Panel:** A centralized control panel for platform administrators to monitor overall metrics, manage stores, handle billing, and oversee platform health.\n*   **Embedded Widget:** A lightweight, customizable, shopper-facing widget that floats on the store's frontend, providing an intuitive multi-step consultation process.\n*   **Automated Drip Emails:** Built-in email campaigns for onboarding, trial expiration warnings, and dun"
+    },
+    {
+      "overall_rank": 4,
+      "name": "shopco-ecommerce",
+      "description": "Full MERN e-commerce site, a pixel-faithful rebuild of a community Figma template.",
+      "url": "https://github.com/MuhammadHussain2004/shopco-ecommerce",
+      "homepage": "https://frontend-ten-cyan-64.vercel.app",
+      "topics": [
+        "featured",
+        "mern-stack"
+      ],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-08-30T22:43:44Z",
+      "created_at": "2026-08-30T21:39:18Z",
+      "score": 91,
+      "full_stack": true,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "backend",
+        "database",
+        "API layer",
+        "deployment",
+        "security/validation",
+        "separated frontend/backend architecture"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "email/notifications",
+        "payments/subscriptions",
+        "reviews/feedback",
+        "search/filtering",
+        "third-party integration",
+        "uploads/imports"
+      ],
+      "technologies": [
+        "Express",
+        "Mongoose",
+        "Node.js",
+        "React",
+        "Stripe",
+        "Vite"
+      ],
+      "source_file_count": 99,
+      "test_file_count": 0,
+      "evidence_files": [
+        "backend/package.json",
+        "frontend/package.json"
+      ],
+      "tree_scan_complete": true,
+      "readme_excerpt": "# SHOP.CO — E-commerce Website\n\nA pixel-faithful rebuild of the \"Shop.co\" Figma community template, built as a full MERN stack app.\n\n- **Frontend**: React (Vite), plain CSS\n- **Backend**: Node.js + Express\n- **Database**: MongoDB (Atlas)\n\n## Project structure\n\n```\nfrontend/   React app (Home, Shop, Product Detail, Cart, Checkout)\nbackend/    Express REST API + MongoDB models\n```\n\n## Local setup\n\n### 1. Backend\n\n```\ncd backend\nnpm install\ncp .env.example .env   # then fill in MONGODB_URI\nnpm run seed            # seeds products, reviews, testimonials, promo codes\nnpm run dev              # runs on http://localhost:5000\n```\n\n### 2. Frontend\n\n```\ncd frontend\nnpm install\ncp .env.example .env   # VITE_API_URL=http://localhost:5000 (already the default)\nnpm run dev              # runs on http://localhost:5173\n```\n\nTry promo code `SAVE20` on the Cart page for a working discount example.\n\n## Deployment (Vercel + MongoDB Atlas)\n\nBoth `frontend` and `backend` deploy as **separate Vercel projects** from the same GitHub repo (each with its own \"Root Directory\" setting).\n\n1. **MongoDB Atlas**: create a free M0 cluster, a database user, allow network access from `0.0.0.0/0`, and copy the connection string.\n2. **Backend on Vercel**: New Project → import this repo → Root Directory = `backend` → Environment Variables: `MONGODB_URI`, `CLIENT_URL` (the frontend's Vercel URL, set after step 3). Deploy, then run `npm run seed` locally once against the Atlas URI to populate the database.\n3. **Fron"
+    },
+    {
+      "overall_rank": 5,
+      "name": "full-stack-auth",
+      "description": "Full-stack authentication app with a React and Vite frontend and an Express backend with signup, login, JWT-protected profiles, and JSON user storage.",
+      "url": "https://github.com/MuhammadHussain2004/full-stack-auth",
+      "homepage": "https://fullstack-auth-delta.vercel.app/",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-08-27T23:21:04Z",
+      "created_at": "2026-08-27T22:18:10Z",
+      "score": 82,
+      "full_stack": true,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "backend",
+        "database",
+        "API layer",
+        "authentication/authorization",
+        "deployment",
+        "security/validation",
+        "separated frontend/backend architecture"
+      ],
+      "feature_domains": [
+        "reviews/feedback",
+        "third-party integration"
+      ],
+      "technologies": [
+        "Express",
+        "JWT",
+        "OAuth",
+        "React",
+        "Vite"
+      ],
+      "source_file_count": 24,
+      "test_file_count": 0,
+      "evidence_files": [
+        "task02-backend/package.json",
+        "task02-frontend/package.json"
+      ],
+      "tree_scan_complete": true,
+      "readme_excerpt": "<h1 align=\"center\">Welcome 👋</h1>\n<p>\n</p>\n\n## Show your support\n\nGive a ⭐️ if this project helped you!\n\n***\n_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_\n"
+    },
+    {
+      "overall_rank": 6,
+      "name": "students-Records-app",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/students-Records-app",
+      "homepage": "https://studentsrecordsapp-teal.vercel.app",
+      "topics": [],
+      "languages": [
+        "TypeScript",
+        "JavaScript",
+        "CSS"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-08-28T12:36:28Z",
+      "created_at": "2026-08-28T12:25:49Z",
+      "score": 79,
+      "full_stack": true,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "backend",
+        "database",
+        "API layer",
+        "deployment",
+        "separated frontend/backend architecture"
+      ],
+      "feature_domains": [
+        "content/data management",
+        "reviews/feedback",
+        "search/filtering"
+      ],
+      "technologies": [
+        "MongoDB",
+        "Mongoose",
+        "Next.js",
+        "Node.js",
+        "React",
+        "Tailwind CSS",
+        "TypeScript"
+      ],
+      "source_file_count": 16,
+      "test_file_count": 0,
+      "evidence_files": [
+        "package.json"
+      ],
+      "tree_scan_complete": true,
+      "readme_excerpt": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).\n\n## Getting Started\n\nFirst, run the development server:\n\n```bash\nnpm run dev\n# or\nyarn dev\n# or\npnpm dev\n# or\nbun dev\n```\n\nOpen [http://localhost:3000](http://localhost:3000) with your browser to see the result.\n\nYou can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.\n\nThis project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.\n\n## Learn More\n\nTo learn more about Next.js, take a look at the following resources:\n\n- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.\n- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.\n\nYou can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!\n\n## Deploy on Vercel\n\nThe easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.\n\nCheck out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.\n"
+    },
+    {
+      "overall_rank": 7,
+      "name": "ShopGuard",
+      "description": "The purpose of this project is to develop a role based access system. Authentication and Authorization is the priority of this project",
+      "url": "https://github.com/MuhammadHussain2004/ShopGuard",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-09-18T11:57:10Z",
+      "created_at": "2026-09-18T11:57:00Z",
+      "score": 78,
+      "full_stack": true,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "backend",
+        "database",
+        "authentication/authorization",
+        "deployment",
+        "security/validation",
+        "separated frontend/backend architecture"
+      ],
+      "feature_domains": [
+        "administration",
+        "reviews/feedback",
+        "third-party integration"
+      ],
+      "technologies": [
+        "Express",
+        "JWT",
+        "Mongoose",
+        "Node.js",
+        "React",
+        "Vite",
+        "Zod"
+      ],
+      "source_file_count": 11,
+      "test_file_count": 0,
+      "evidence_files": [
+        "backend/package.json",
+        "frontend/package.json",
+        "package.json"
+      ],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 8,
+      "name": "My-Portfolio",
+      "description": "Muhammad Hussain — MERN Stack Developer Portfolio",
+      "url": "https://github.com/MuhammadHussain2004/My-Portfolio",
+      "homepage": "https://muhammadhussain2004.github.io/My-Portfolio/",
+      "topics": [],
+      "languages": [
+        "TypeScript",
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-09-08T19:50:57Z",
+      "created_at": "2026-09-03T14:20:32Z",
+      "score": 57,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "backend",
+        "automated testing",
+        "deployment",
+        "CI/CD"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "content/data management",
+        "reviews/feedback",
+        "roles/permissions",
+        "third-party integration",
+        "uploads/imports",
+        "workflow/state machine"
+      ],
+      "technologies": [
+        "Express",
+        "GitHub Actions",
+        "Node.js",
+        "Playwright",
+        "React",
+        "Tailwind CSS",
+        "TypeScript",
+        "Vite"
+      ],
+      "source_file_count": 16,
+      "test_file_count": 0,
+      "evidence_files": [
+        ".github/workflows/deploy.yml",
+        "package.json"
+      ],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 9,
+      "name": "Railway_Reservation_System_Java_Netbeans",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/Railway_Reservation_System_Java_Netbeans",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "HTML",
+        "C",
+        "Java",
+        "CSS",
+        "C++",
+        "Shell",
+        "Batchfile",
+        "RenderScript"
+      ],
+      "stars": 0,
+      "pushed_at": "2024-10-13T00:36:54Z",
+      "created_at": "2024-10-11T04:16:16Z",
+      "score": 46,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "backend",
+        "database"
+      ],
+      "feature_domains": [
+        "administration",
+        "catalog/commerce",
+        "content/data management",
+        "email/notifications",
+        "reviews/feedback",
+        "search/filtering",
+        "third-party integration",
+        "uploads/imports",
+        "workflow/state machine"
+      ],
+      "technologies": [
+        "Express",
+        "MySQL"
+      ],
+      "source_file_count": 90,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 10,
+      "name": "Wanderly-Travel-Recommendation",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/Wanderly-Travel-Recommendation",
+      "homepage": "https://muhammadhussain2004.github.io/Wanderly-Travel-Recommendation/",
+      "topics": [],
+      "languages": [
+        "HTML",
+        "JavaScript"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-08-27T21:32:26Z",
+      "created_at": "2026-08-27T21:31:27Z",
+      "score": 35,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "deployment",
+        "CI/CD"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "recommendation engine",
+        "roles/permissions",
+        "uploads/imports",
+        "workflow/state machine"
+      ],
+      "technologies": [
+        "GitHub Actions"
+      ],
+      "source_file_count": 5,
+      "test_file_count": 0,
+      "evidence_files": [
+        ".github/workflows/pages.yml"
+      ],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 11,
+      "name": "Multi-pages-website-react",
+      "description": "ecoomerce multi pages websites",
+      "url": "https://github.com/MuhammadHussain2004/Multi-pages-website-react",
+      "homepage": "https://multi-pages-website-react.vercel.app",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-08-27T23:29:36Z",
+      "created_at": "2026-08-17T04:16:08Z",
+      "score": 34,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "deployment"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "reviews/feedback",
+        "search/filtering",
+        "third-party integration"
+      ],
+      "technologies": [
+        "React",
+        "Vite"
+      ],
+      "source_file_count": 54,
+      "test_file_count": 0,
+      "evidence_files": [
+        "package.json"
+      ],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 12,
+      "name": "paradise-nursery",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/paradise-nursery",
+      "homepage": "https://muhammadhussain2004.github.io/paradise-nursery/",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-09-03T14:20:07Z",
+      "created_at": "2026-08-28T19:35:39Z",
+      "score": 32,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "deployment",
+        "state/data management"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "reviews/feedback",
+        "third-party integration"
+      ],
+      "technologies": [
+        "React",
+        "Redux Toolkit",
+        "Vite"
+      ],
+      "source_file_count": 17,
+      "test_file_count": 0,
+      "evidence_files": [
+        "package.json"
+      ],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 13,
+      "name": "resume",
+      "description": "Auto-updating resume, synced daily from live GitHub activity",
+      "url": "https://github.com/MuhammadHussain2004/resume",
+      "homepage": "https://github.com/MuhammadHussain2004/resume/blob/master/Muhammad_Hussain_Resume.pdf",
+      "topics": [],
+      "languages": [
+        "Python",
+        "TeX"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-09-21T22:43:31Z",
+      "created_at": "2026-09-04T21:32:31Z",
+      "score": 32,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "authentication/authorization",
+        "automated testing",
+        "deployment",
+        "CI/CD"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "email/notifications",
+        "roles/permissions",
+        "uploads/imports",
+        "workflow/state machine"
+      ],
+      "technologies": [
+        "GitHub Actions",
+        "OAuth"
+      ],
+      "source_file_count": 5,
+      "test_file_count": 1,
+      "evidence_files": [
+        ".github/workflows/sync-resume.yml",
+        "scripts/requirements.txt"
+      ],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 14,
+      "name": "UI-project",
+      "description": "Practicing Reactjs",
+      "url": "https://github.com/MuhammadHussain2004/UI-project",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-07-02T20:37:45Z",
+      "created_at": "2026-07-02T20:37:39Z",
+      "score": 28,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "recommendation engine",
+        "reviews/feedback",
+        "third-party integration"
+      ],
+      "technologies": [
+        "React",
+        "Tailwind CSS",
+        "Vite"
+      ],
+      "source_file_count": 17,
+      "test_file_count": 0,
+      "evidence_files": [
+        "package.json"
+      ],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 15,
+      "name": "Notes-app",
+      "description": "Practicing Reactjs",
+      "url": "https://github.com/MuhammadHussain2004/Notes-app",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-07-02T20:36:02Z",
+      "created_at": "2026-07-02T20:35:57Z",
+      "score": 28,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "content/data management",
+        "recommendation engine",
+        "reviews/feedback",
+        "third-party integration"
+      ],
+      "technologies": [
+        "React",
+        "Tailwind CSS",
+        "Vite"
+      ],
+      "source_file_count": 6,
+      "test_file_count": 0,
+      "evidence_files": [
+        "package.json"
+      ],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 16,
+      "name": "Gallery-project",
+      "description": "Practicing Reactjs",
+      "url": "https://github.com/MuhammadHussain2004/Gallery-project",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-07-02T20:34:16Z",
+      "created_at": "2026-07-02T20:34:11Z",
+      "score": 26,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "recommendation engine",
+        "reviews/feedback",
+        "third-party integration"
+      ],
+      "technologies": [
+        "React",
+        "Tailwind CSS",
+        "Vite"
+      ],
+      "source_file_count": 8,
+      "test_file_count": 0,
+      "evidence_files": [
+        "package.json"
+      ],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 17,
+      "name": "Card-project",
+      "description": "practicing reactjs",
+      "url": "https://github.com/MuhammadHussain2004/Card-project",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "CSS",
+        "JavaScript",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-07-02T20:32:22Z",
+      "created_at": "2026-07-02T20:32:13Z",
+      "score": 26,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "recommendation engine",
+        "reviews/feedback",
+        "third-party integration"
+      ],
+      "technologies": [
+        "React",
+        "Vite"
+      ],
+      "source_file_count": 8,
+      "test_file_count": 0,
+      "evidence_files": [
+        "package.json"
+      ],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 18,
+      "name": "weather-app",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/weather-app",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2025-10-05T00:10:32Z",
+      "created_at": "2025-10-05T00:03:08Z",
+      "score": 22,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend"
+      ],
+      "feature_domains": [
+        "search/filtering",
+        "third-party integration",
+        "uploads/imports"
+      ],
+      "technologies": [],
+      "source_file_count": 3,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 19,
+      "name": "Expense-Tracker",
+      "description": "Expense tracker project using html css and Javacsript",
+      "url": "https://github.com/MuhammadHussain2004/Expense-Tracker",
+      "homepage": "https://muhammadhussain2004.github.io/Expense-Tracker/",
+      "topics": [],
+      "languages": [
+        "CSS",
+        "JavaScript",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-08-03T22:19:37Z",
+      "created_at": "2026-07-27T01:24:27Z",
+      "score": 21,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "deployment"
+      ],
+      "feature_domains": [],
+      "technologies": [],
+      "source_file_count": 3,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 20,
+      "name": "currency-converter",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/currency-converter",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2025-10-05T00:13:08Z",
+      "created_at": "2025-10-04T23:46:15Z",
+      "score": 20,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend"
+      ],
+      "feature_domains": [
+        "third-party integration",
+        "uploads/imports"
+      ],
+      "technologies": [],
+      "source_file_count": 4,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 21,
+      "name": "animated-portfolio-design",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/animated-portfolio-design",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "CSS",
+        "HTML",
+        "JavaScript"
+      ],
+      "stars": 0,
+      "pushed_at": "2025-10-05T00:23:33Z",
+      "created_at": "2025-10-04T23:55:03Z",
+      "score": 18,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend"
+      ],
+      "feature_domains": [
+        "third-party integration"
+      ],
+      "technologies": [],
+      "source_file_count": 3,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 22,
+      "name": "to-do-list",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/to-do-list",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "CSS",
+        "JavaScript",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2025-10-05T00:18:27Z",
+      "created_at": "2025-10-05T00:00:18Z",
+      "score": 18,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend"
+      ],
+      "feature_domains": [
+        "catalog/commerce"
+      ],
+      "technologies": [],
+      "source_file_count": 3,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 23,
+      "name": "stone-paper-scissor",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/stone-paper-scissor",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "stars": 0,
+      "pushed_at": "2025-10-05T01:45:50Z",
+      "created_at": "2025-10-04T23:34:01Z",
+      "score": 16,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend"
+      ],
+      "feature_domains": [],
+      "technologies": [],
+      "source_file_count": 3,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 24,
+      "name": "tic-tac-toe-game",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/tic-tac-toe-game",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2025-10-04T13:29:29Z",
+      "created_at": "2025-10-03T12:55:39Z",
+      "score": 16,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend"
+      ],
+      "feature_domains": [],
+      "technologies": [],
+      "source_file_count": 3,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 25,
+      "name": "memory-card-game",
+      "description": "A simple and interactive memory card matching game built with HTML, CSS, and JavaScript. Players flip cards to find matching pairs, testing focus and memory skills with smooth animations and responsive design.",
+      "url": "https://github.com/MuhammadHussain2004/memory-card-game",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "HTML",
+        "JavaScript",
+        "CSS"
+      ],
+      "stars": 0,
+      "pushed_at": "2025-10-03T12:05:02Z",
+      "created_at": "2025-10-02T19:22:38Z",
+      "score": 16,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend"
+      ],
+      "feature_domains": [],
+      "technologies": [
+        "Angular",
+        "React",
+        "Vue"
+      ],
+      "source_file_count": 3,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 26,
+      "name": "basecamp-trial",
+      "description": "Multi-page adventure gear rental website built with HTML & CSS",
+      "url": "https://github.com/MuhammadHussain2004/basecamp-trial",
+      "homepage": "https://muhammadhussain2004.github.io/basecamp-trial/",
+      "topics": [],
+      "languages": [
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-07-23T00:23:12Z",
+      "created_at": "2026-06-30T08:39:56Z",
+      "score": 9,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "deployment"
+      ],
+      "feature_domains": [],
+      "technologies": [],
+      "source_file_count": 13,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 27,
+      "name": "Responsive-Forms",
+      "description": "responsive forms. All forms related html topics are covered",
+      "url": "https://github.com/MuhammadHussain2004/Responsive-Forms",
+      "homepage": "https://muhammadhussain2004.github.io/Responsive-Forms/",
+      "topics": [],
+      "languages": [
+        "HTML",
+        "CSS"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-08-07T07:35:46Z",
+      "created_at": "2026-08-07T07:29:46Z",
+      "score": 9,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "deployment"
+      ],
+      "feature_domains": [],
+      "technologies": [],
+      "source_file_count": 5,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 28,
+      "name": "Railway-Management-system-project-java-netbeans",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/Railway-Management-system-project-java-netbeans",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "Java"
+      ],
+      "stars": 0,
+      "pushed_at": "2024-10-13T01:07:37Z",
+      "created_at": "2024-10-13T00:39:29Z",
+      "score": 8,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [],
+      "feature_domains": [
+        "search/filtering",
+        "uploads/imports"
+      ],
+      "technologies": [],
+      "source_file_count": 5,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 29,
+      "name": "microsoft-clone-website-Tailwind",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/microsoft-clone-website-Tailwind",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-03-27T13:03:19Z",
+      "created_at": "2026-03-27T12:58:43Z",
+      "score": 8,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [],
+      "feature_domains": [
+        "catalog/commerce",
+        "search/filtering"
+      ],
+      "technologies": [
+        "Tailwind CSS"
+      ],
+      "source_file_count": 3,
+      "test_file_count": 0,
+      "evidence_files": [
+        "package.json"
+      ],
+      "tree_scan_complete": true
+    }
+  ]
+}
