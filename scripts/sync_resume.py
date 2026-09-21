@@ -18,11 +18,13 @@ from datetime import datetime, timezone
 
 import requests
 
+from repo_analyzer import analyze_github_repositories
+
 GITHUB_USERNAME = os.environ["GITHUB_USERNAME"]
 GH_READ_TOKEN = os.environ["GH_READ_TOKEN"]
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 RESUME_PATH = os.environ.get("RESUME_TEX_PATH", "Muhammad_Hussain_Resume.tex")
-MAX_REPOS = int(os.environ.get("MAX_REPOS", "20"))
+MAX_RESUME_PROJECTS = 3
 USER_EXCLUDED_SKILLS = {"php", "shell", "framer motion"}
 
 GITHUB_API = "https://api.github.com"
@@ -112,48 +114,14 @@ def fetch_profile():
 
 
 def fetch_repo_summaries():
-    repos = gh_get(
-        f"/users/{GITHUB_USERNAME}/repos",
-        params={"per_page": 100, "sort": "pushed", "direction": "desc", "type": "owner"},
+    return analyze_github_repositories(
+        gh_get,
+        GITHUB_USERNAME,
+        max_projects=MAX_RESUME_PROJECTS,
     )
-    repos = [r for r in repos if not r.get("fork") and r["name"] != GITHUB_USERNAME]
-    known_repo_urls = {r["html_url"].rstrip("/") for r in repos}
-    repos = repos[:MAX_REPOS]
-
-    summaries = []
-    for repo in repos:
-        name = repo["name"]
-        readme_excerpt = ""
-        try:
-            readme = gh_get(f"/repos/{GITHUB_USERNAME}/{name}/readme")
-            content = base64.b64decode(readme["content"]).decode("utf-8", errors="ignore")
-            readme_excerpt = content[:1500]
-        except requests.HTTPError:
-            pass
-
-        try:
-            languages = gh_get(f"/repos/{GITHUB_USERNAME}/{name}/languages")
-        except requests.HTTPError:
-            languages = {}
-
-        summaries.append(
-            {
-                "name": name,
-                "description": repo.get("description") or "",
-                "url": repo["html_url"],
-                "homepage": repo.get("homepage") or "",
-                "topics": repo.get("topics") or [],
-                "languages": list(languages.keys()),
-                "stars": repo.get("stargazers_count", 0),
-                "pushed_at": repo.get("pushed_at"),
-                "created_at": repo.get("created_at"),
-                "readme_excerpt": readme_excerpt,
-            }
-        )
-    return summaries, known_repo_urls
 
 
-def build_prompt(resume_tex, profile, repo_summaries):
+def build_prompt(resume_tex, profile, repo_summaries, selected_project_urls):
     system = (
         "You are maintaining a LaTeX resume for a full-stack software "
         "engineer. You will be given the CURRENT resume .tex source and a "
@@ -188,11 +156,20 @@ def build_prompt(resume_tex, profile, repo_summaries):
         "that aren't evidenced in the data.\n"
         "- The whole resume must keep fitting on ONE page: if you add "
         "content, remove or shorten something of equal or lesser weight so "
-        "total length doesn't grow. Do not let Projects exceed 4 entries or "
+        "total length doesn't grow. Keep exactly 3 Projects entries or "
         "Experience exceed its current entry count.\n"
-        "- Projects section: keep at most 4 of the strongest / most recent "
-        "projects. Prefer repos with real substance (a description, a "
-        "README, meaningful code) over trivial/empty ones. Each project "
+        "- Project selection is deterministic and has already been completed "
+        "from a full file-tree and dependency-manifest scan of every owned, "
+        "non-fork public repository. The `resume_rank` values identify the "
+        "three winners. The Projects section MUST contain exactly those three "
+        "repositories and no substitutions; use rank order. A newly ranked "
+        "winner must replace the project that fell out of the top three.\n"
+        "- Ranking strongly prioritizes evidenced frontend + backend + database "
+        "architecture, then authentication, API design, testing, deployment, "
+        "CI/CD, containers, security, real-time features, state management, "
+        "TypeScript, code substance, documentation, and recency. Do not second-guess "
+        "the ranking based only on stars or recency.\n"
+        "- Each selected project "
         "keeps the existing \\resumeProjectHeading / \\resumeItemListStart "
         "pattern, with GitHub link (and live demo link via `homepage` if "
         "present).\n"
@@ -220,7 +197,9 @@ def build_prompt(resume_tex, profile, repo_summaries):
         f"CURRENT RESUME (.tex):\n{resume_tex}\n\n"
         f"GITHUB PROFILE:\n{json.dumps(profile, indent=2)}\n\n"
         f"GITHUB REPOSITORIES (as of {datetime.now(timezone.utc).isoformat()}):\n"
-        f"{json.dumps(repo_summaries, indent=2)}"
+        f"{json.dumps(repo_summaries, indent=2)}\n\n"
+        "MANDATORY PROJECT URLS (exactly these three, in deterministic rank order):\n"
+        f"{json.dumps(sorted(selected_project_urls, key=lambda url: next(r['resume_rank'] for r in repo_summaries if r['url'].rstrip('/') == url)), indent=2)}"
     )
     return system, user
 
@@ -286,7 +265,13 @@ def extract_project_urls(tex):
     return set(re.findall(r"https://github\.com/\S+?(?=[}\s])", match.group(1)))
 
 
-def validate_structure(old_tex, new_tex, source_haystack, known_repo_urls):
+def validate_structure(
+    old_tex,
+    new_tex,
+    source_haystack,
+    known_repo_urls,
+    selected_project_urls,
+):
     """Mechanically checks the model's output against the hard rules given
     in the prompt. Returns a list of human-readable problems; an empty list
     means the output is safe to accept."""
@@ -326,6 +311,13 @@ def validate_structure(old_tex, new_tex, source_haystack, known_repo_urls):
     if bad_urls:
         problems.append(
             f"Project link(s) not found among this account's actual repos: {bad_urls}"
+        )
+
+    normalized_project_urls = {url.rstrip("/") for url in new_project_urls}
+    if normalized_project_urls != selected_project_urls:
+        problems.append(
+            "Projects do not exactly match the deterministic top-ranked repositories. "
+            f"Expected {sorted(selected_project_urls)}, got {sorted(normalized_project_urls)}"
         )
 
     return problems
@@ -382,8 +374,19 @@ def main():
     print(f"Gemini model candidates (best first): {model_candidates}")
 
     profile = fetch_profile()
-    repo_summaries, known_repo_urls = fetch_repo_summaries()
-    system, user = build_prompt(current_tex, profile, repo_summaries)
+    repo_summaries, known_repo_urls, selected_project_urls = fetch_repo_summaries()
+    if len(selected_project_urls) != MAX_RESUME_PROJECTS:
+        raise RuntimeError(
+            f"Expected {MAX_RESUME_PROJECTS} eligible projects, found {len(selected_project_urls)}; "
+            "leaving the resume unchanged."
+        )
+    print(f"Deterministic resume projects: {sorted(selected_project_urls)}")
+    system, user = build_prompt(
+        current_tex,
+        profile,
+        repo_summaries,
+        selected_project_urls,
+    )
 
     raw_output = None
     errors = []
@@ -416,7 +419,13 @@ def main():
     changed = updated_tex != current_tex.strip() + "\n"
 
     if changed:
-        problems = validate_structure(current_tex, updated_tex, user, known_repo_urls)
+        problems = validate_structure(
+            current_tex,
+            updated_tex,
+            user,
+            known_repo_urls,
+            selected_project_urls,
+        )
         if problems:
             print("Rejecting model output — it broke a hard rule:", file=sys.stderr)
             for p in problems:
