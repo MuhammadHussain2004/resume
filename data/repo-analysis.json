@@ -331,7 +331,7 @@
       "name": "ShopGuard",
       "description": "The purpose of this project is to develop a role based access system. Authentication and Authorization is the priority of this project",
       "url": "https://github.com/MuhammadHussain2004/ShopGuard",
-      "homepage": "",
+      "homepage": "https://shop-guard-exn6.vercel.app/",
       "topics": [],
       "languages": [
         "JavaScript",
@@ -389,7 +389,7 @@
         "HTML"
       ],
       "stars": 0,
-      "pushed_at": "2026-09-08T19:50:57Z",
+      "pushed_at": "2026-09-22T00:18:02Z",
       "created_at": "2026-09-03T14:20:32Z",
       "score": 57,
       "full_stack": false,
@@ -605,7 +605,7 @@
         "TeX"
       ],
       "stars": 0,
-      "pushed_at": "2026-09-21T23:26:24Z",
+      "pushed_at": "2026-09-22T00:17:45Z",
       "created_at": "2026-09-04T21:32:31Z",
       "score": 32,
       "full_stack": false,
