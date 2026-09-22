@@ -51,6 +51,13 @@ jobs:
             echo "ANALYSIS_CHANGED=true" >> "$GITHUB_ENV"
           fi
 
+      - name: Recompile when the resume source was pushed
+        if: github.event_name == 'push'
+        run: |
+          if git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" | grep -Fxq "Muhammad_Hussain_Resume.tex"; then
+            echo "RESUME_CHANGED=true" >> "$GITHUB_ENV"
+          fi
+
       - name: Force recompile (manual .tex edit)
         if: github.event.inputs.skip_ai == 'true'
         run: echo "RESUME_CHANGED=true" >> "$GITHUB_ENV"
