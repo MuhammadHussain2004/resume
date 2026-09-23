@@ -27,6 +27,8 @@ GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 RESUME_PATH = os.environ.get("RESUME_TEX_PATH", "Muhammad_Hussain_Resume.tex")
 ANALYSIS_PATH = Path(os.environ.get("REPO_ANALYSIS_PATH", "data/repo-analysis.json"))
 MAX_RESUME_PROJECTS = 3
+DEFERRED_SKILLS = {"php", "shell", "framer motion"}
+DEFERRED_SKILL_CUTOFF = datetime(2026, 9, 23, tzinfo=timezone.utc)
 
 GITHUB_API = "https://api.github.com"
 GH_HEADERS = {
@@ -35,6 +37,24 @@ GH_HEADERS = {
     "X-GitHub-Api-Version": "2022-11-28",
 }
 GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta"
+
+
+def deferred_skills_with_new_evidence(repo_summaries):
+    """Allow deferred skills only when a repo has fresh evidence after review."""
+    allowed = set()
+    for summary in repo_summaries:
+        pushed_at = summary.get("pushed_at") or ""
+        try:
+            pushed = datetime.fromisoformat(pushed_at.replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        if pushed <= DEFERRED_SKILL_CUTOFF:
+            continue
+        evidence = json.dumps(summary, ensure_ascii=False).lower()
+        for skill in DEFERRED_SKILLS:
+            if skill in evidence:
+                allowed.add(skill)
+    return allowed
 
 
 def resolve_model():
@@ -256,6 +276,14 @@ def build_prompt(resume_tex, profile, repo_summaries, selected_project_urls):
         "commentary, no explanation before or after."
     )
 
+    allowed_deferred = deferred_skills_with_new_evidence(repo_summaries)
+    deferred_rule = (
+        "- PHP, Shell, and Framer Motion are currently deferred by the user. "
+        f"Do not add them unless fresh repository evidence after {DEFERRED_SKILL_CUTOFF.date()} "
+        f"supports them; currently allowed fresh evidence: {sorted(allowed_deferred) or 'none'}.\n"
+    )
+    system += "\n" + deferred_rule
+
     user = (
         f"CURRENT RESUME (.tex):\n{resume_tex}\n\n"
         f"GITHUB PROFILE:\n{json.dumps(profile, indent=2)}\n\n"
@@ -287,7 +315,9 @@ EXPECTED_SECTIONS = [
 # GitHub data" fabrication check so they don't cause false-positive rejections.
 SKILL_TOKEN_STOPWORDS = {
     "languages", "core cs", "mern", "full-stack", "full stack", "databases",
-    "developer tools", "deployment", "cloud", "soft skills",
+    "core computer science", "frontend", "frontend technologies", "backend",
+    "backend technologies", "databases and orms", "developer tools",
+    "deployment", "cloud", "cloud and deployment", "soft skills",
 }
 
 
@@ -334,6 +364,7 @@ def validate_structure(
     source_haystack,
     known_repo_urls,
     selected_project_urls,
+    allowed_deferred_skills=None,
 ):
     """Mechanically checks the model's output against the hard rules given
     in the prompt. Returns a list of human-readable problems; an empty list
@@ -355,6 +386,17 @@ def validate_structure(
     old_skills = extract_skill_tokens(old_tex)
     new_skills = extract_skill_tokens(new_tex)
     added_skills = new_skills - old_skills
+    allowed_deferred_skills = allowed_deferred_skills or set()
+    deferred_claims = {
+        skill for skill in DEFERRED_SKILLS
+        if any(skill in token.lower() for token in new_skills)
+        and skill not in allowed_deferred_skills
+    }
+    if deferred_claims:
+        problems.append(
+            "Deferred user skills were added without fresh evidence: "
+            f"{sorted(deferred_claims)}"
+        )
     haystack_lower = source_haystack.lower()
     unverified_skills = [s for s in added_skills if s.lower() not in haystack_lower]
     if unverified_skills:
@@ -432,6 +474,7 @@ def main():
 
     profile = fetch_profile()
     repo_summaries, known_repo_urls, selected_project_urls = fetch_repo_summaries()
+    allowed_deferred_skills = deferred_skills_with_new_evidence(repo_summaries)
     write_public_repository_analysis(repo_summaries)
     if len(selected_project_urls) != MAX_RESUME_PROJECTS:
         raise RuntimeError(
@@ -483,6 +526,7 @@ def main():
             user,
             known_repo_urls,
             selected_project_urls,
+            allowed_deferred_skills,
         )
         if problems:
             print("Rejecting model output — it broke a hard rule:", file=sys.stderr)
