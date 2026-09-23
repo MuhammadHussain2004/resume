@@ -28,7 +28,7 @@ RESUME_PATH = os.environ.get("RESUME_TEX_PATH", "Muhammad_Hussain_Resume.tex")
 ANALYSIS_PATH = Path(os.environ.get("REPO_ANALYSIS_PATH", "data/repo-analysis.json"))
 MAX_RESUME_PROJECTS = 3
 DEFERRED_SKILLS = {"php", "shell", "framer motion"}
-DEFERRED_SKILL_CUTOFF = datetime(2026, 9, 23, tzinfo=timezone.utc)
+DEFERRED_SKILL_CUTOFF = datetime(2026, 9, 24, tzinfo=timezone.utc)
 
 GITHUB_API = "https://api.github.com"
 GH_HEADERS = {
