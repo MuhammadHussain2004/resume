@@ -420,7 +420,7 @@
         "TypeScript",
         "Vite"
       ],
-      "source_file_count": 16,
+      "source_file_count": 17,
       "test_file_count": 0,
       "evidence_files": [
         ".github/workflows/deploy.yml",
@@ -605,7 +605,7 @@
         "TeX"
       ],
       "stars": 0,
-      "pushed_at": "2026-10-03T08:49:12Z",
+      "pushed_at": "2026-10-04T21:02:25Z",
       "created_at": "2026-09-04T21:32:31Z",
       "score": 32,
       "full_stack": false,
@@ -986,7 +986,7 @@
       "stars": 0,
       "pushed_at": "2025-10-04T13:29:29Z",
       "created_at": "2025-10-03T12:55:39Z",
-      "score": 16,
+      "score": 15,
       "full_stack": false,
       "eligible": true,
       "capabilities": [
