@@ -33,6 +33,9 @@
 \raggedbottom
 \raggedright
 \setlength{\tabcolsep}{0in}
+% Give body copy enough breathing room for fast scanning without expanding
+% the single-column layout into a second page.
+\renewcommand{\baselinestretch}{1.04}
 
 % NOTE ON ATS TEXT EXTRACTION: \scshape (small caps) corrupts copy/paste
 % text extraction in this font (splits words with spurious spaces), so
@@ -57,7 +60,7 @@
 }{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
 
 \newcommand{\resumeItem}[1]{
-  \item\small{#1 \vspace{-2pt}}
+  \item\small{#1 \vspace{-1pt}}
 }
 
 \newcommand{\resumeSubheading}[4]{
@@ -65,21 +68,21 @@
     \begin{tabular*}{0.98\textwidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{#1} & #2 \\
       \textit{\small#3} & \textit{\small #4} \\
-    \end{tabular*}\vspace{-7pt}
+    \end{tabular*}\vspace{-4pt}
 }
 
 \newcommand{\resumeProjectHeading}[2]{
     \item
     \begin{tabular*}{0.98\textwidth}{l@{\extracolsep{\fill}}r}
       \small#1 & #2 \\
-    \end{tabular*}\vspace{-7pt}
+    \end{tabular*}\vspace{-4pt}
 }
 
 \newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
-\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}, itemsep=3pt, topsep=3pt]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.18in, label=-]}
-\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.18in, label=-, itemsep=2pt, topsep=3pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-2pt}}
 
 \begin{document}
 
@@ -96,7 +99,7 @@
 
 %-----------SUMMARY-----------
 \section{Summary}
-\small{Software engineer with a strong foundation in data structures, object-oriented design, and database systems, and particular depth in full-stack MERN development (React, Node.js, Express, MongoDB). Has designed multi-service systems, including a deterministic recommendation engine and a role-based access-control platform, with production experience across Java and C/C++ as well. IBM-certified in full-stack JavaScript development; BSCS graduate, CGPA 3.7/4.0.}
+\small{Software Engineer and full-stack MERN developer with a strong foundation in data structures, object-oriented design, and database systems. Experienced in designing RESTful APIs, JWT authentication, role-based access control, database-backed applications, deterministic recommendation engines, and automated testing with React, Node.js, Express, MongoDB, and MySQL. IBM-certified in full-stack JavaScript development; BSCS graduate with a 3.7/4.0 CGPA.}
 
 %-----------EXPERIENCE-----------
 \section{Experience}
