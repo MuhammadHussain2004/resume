@@ -29,7 +29,7 @@
 % layout. The previous -1.0in top correction pushed the header into the page
 % edge and made section content feel compressed.
 \addtolength{\topmargin}{-0.75in}
-\addtolength{\textheight}{1.95in}
+\addtolength{\textheight}{2.2in}
 
 \urlstyle{same}
 
@@ -38,7 +38,7 @@
 \setlength{\tabcolsep}{0in}
 % Give body copy enough breathing room for fast scanning without expanding
 % the single-column layout into a second page.
-\renewcommand{\baselinestretch}{1.04}
+\renewcommand{\baselinestretch}{1.01}
 
 % NOTE ON ATS TEXT EXTRACTION: \scshape (small caps) corrupts copy/paste
 % text extraction in this font (splits words with spurious spaces), so
@@ -61,32 +61,32 @@
 \titleformat{\section}{
   \raggedright\large\bfseries
 }{}{0em}{}[\color{black}\titlerule]
-\titlespacing*{\section}{0pt}{9pt}{5pt}
+\titlespacing*{\section}{0pt}{5pt}{3pt}
 
 \newcommand{\resumeItem}[1]{
   \item\small{#1}
 }
 
 \newcommand{\resumeSubheading}[4]{
-  \vspace{1pt}\item
+  \vspace{0pt}\item
     \begin{tabular*}{0.98\textwidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{#1} & #2 \\
       \textit{\small#3} & \textit{\small #4} \\
-    \end{tabular*}\vspace{-2pt}
+    \end{tabular*}\vspace{-4pt}
 }
 
 \newcommand{\resumeProjectHeading}[2]{
-    \vspace{1pt}\item
+    \vspace{0pt}\item
     \begin{tabular*}{0.98\textwidth}{l@{\extracolsep{\fill}}r}
       \small#1 & #2 \\
-    \end{tabular*}\vspace{-2pt}
+    \end{tabular*}\vspace{-4pt}
 }
 
 \newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
-\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}, itemsep=4pt, topsep=4pt]}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}, itemsep=2pt, topsep=2pt]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.18in, label=-, itemsep=2pt, topsep=4pt]}
-\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{0pt}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.18in, label=-, itemsep=1pt, topsep=2pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-2pt}}
 
 \begin{document}
 

@@ -59,6 +59,7 @@ This file is a durable project-memory record of the work discussed in the AI cha
 
 ## Operational rules for future assistants
 
+- After every future chat task that changes this ecosystem, append a dated entry to this file and mirror the same update in the portfolio repository's `docs/CONVERSATION_HISTORY.md`. Record what changed, why, validation results, and commit/workflow IDs.
 - Read this file and the repository `AGENTS.md`/`GEMINI.md` before editing.
 - Keep the resume source and compiled PDF synchronized after a source edit.
 - Keep portfolio generated JSON and UI synchronized with the resume source.
