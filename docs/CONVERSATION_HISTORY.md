@@ -55,7 +55,7 @@ This file is a durable project-memory record of the work discussed in the AI cha
 
 - Resume spacing was adjusted after the user reviewed a PDF screenshot: more top breathing room, better section spacing, more distance between experience/project entries, and less aggressive negative vertical spacing.
 - The Summary was refined with ATS-friendly but evidence-based keywords: RESTful APIs, JWT authentication, role-based access control, database-backed applications, deterministic recommendation engines, and automated testing.
-- The latest resume change was pushed to `master` in commit `075a532` after rebasing remote automation changes.
+- The latest resume source change was pushed to `master` in commit `075a532`; the compiled PDF was then committed by the successful workflow as `23c3723`.
 
 ## Operational rules for future assistants
 
