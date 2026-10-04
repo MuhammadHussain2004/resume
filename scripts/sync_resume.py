@@ -26,6 +26,7 @@ GH_READ_TOKEN = os.environ["GH_READ_TOKEN"]
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 RESUME_PATH = os.environ.get("RESUME_TEX_PATH", "Muhammad_Hussain_Resume.tex")
 ANALYSIS_PATH = Path(os.environ.get("REPO_ANALYSIS_PATH", "data/repo-analysis.json"))
+HISTORY_PATH = Path(os.environ.get("CONVERSATION_HISTORY_PATH", "docs/CONVERSATION_HISTORY.md"))
 MAX_RESUME_PROJECTS = 3
 DEFERRED_SKILLS = {"php", "shell", "framer motion"}
 DEFERRED_SKILL_CUTOFF = datetime(2026, 9, 24, tzinfo=timezone.utc)
@@ -190,7 +191,7 @@ def write_public_repository_analysis(repo_summaries):
         print("Shared repository analysis is already current.")
 
 
-def build_prompt(resume_tex, profile, repo_summaries, selected_project_urls):
+def build_prompt(resume_tex, profile, repo_summaries, selected_project_urls, conversation_history):
     system = (
         "You are maintaining a LaTeX resume for a full-stack software "
         "engineer. You will be given the CURRENT resume .tex source and a "
@@ -198,6 +199,11 @@ def build_prompt(resume_tex, profile, repo_summaries, selected_project_urls):
         "profile README, and their repositories). Your job is to decide "
         "whether the resume needs updating, and if so, return the FULL "
         "updated .tex file.\n\n"
+        "A PROJECT HISTORY excerpt is also provided. Treat it as persistent "
+        "context for user preferences, deferred skills, synchronization rules, "
+        "and prior decisions. Use it to avoid regressing earlier choices, but "
+        "never treat it as evidence for a new factual claim; current GitHub "
+        "data and the current resume remain authoritative for facts.\n\n"
         "Hard rules (a program will mechanically verify these and reject "
         "your output if you break them, so follow them exactly):\n"
         "- Byte-for-byte preserve everything from \\documentclass through "
@@ -286,6 +292,7 @@ def build_prompt(resume_tex, profile, repo_summaries, selected_project_urls):
 
     user = (
         f"CURRENT RESUME (.tex):\n{resume_tex}\n\n"
+        f"PROJECT HISTORY (persistent context; latest excerpt):\n{conversation_history}\n\n"
         f"GITHUB PROFILE:\n{json.dumps(profile, indent=2)}\n\n"
         f"GITHUB REPOSITORIES (as of {datetime.now(timezone.utc).isoformat()}):\n"
         f"{json.dumps(repo_summaries, indent=2)}\n\n"
@@ -469,6 +476,14 @@ def main():
     with open(RESUME_PATH, "r", encoding="utf-8") as f:
         current_tex = f.read()
 
+    if HISTORY_PATH.exists():
+        history_text = HISTORY_PATH.read_text(encoding="utf-8")
+        # Keep the prompt bounded while retaining the most recent decisions and
+        # the permanent operating rules at the end of the history file.
+        conversation_history = history_text[-12000:]
+    else:
+        conversation_history = "(No conversation history file found.)"
+
     model_candidates = resolve_model()
     print(f"Gemini model candidates (best first): {model_candidates}")
 
@@ -487,6 +502,7 @@ def main():
         profile,
         repo_summaries,
         selected_project_urls,
+        conversation_history,
     )
 
     raw_output = None

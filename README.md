@@ -85,6 +85,16 @@ ready to switch the automation on.
 
 ## Local editing
 
+### Persistent project context
+
+Before making any change, an AI assistant must read
+[`docs/CONVERSATION_HISTORY.md`](docs/CONVERSATION_HISTORY.md). After a change,
+it must append the decision, validation result, and commit/workflow IDs there
+and mirror the same entry in the portfolio repository. The daily Gemini sync
+also receives the latest history excerpt as preference/context input; GitHub
+repository evidence and the current resume remain authoritative for factual
+claims.
+
 You can still edit `Muhammad_Hussain_Resume.tex` by hand any time — the next
 scheduled run treats your manual edits as the new baseline and only adjusts
 what the GitHub data actually warrants. To get the PDF back in sync with a
