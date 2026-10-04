@@ -25,8 +25,11 @@
 \addtolength{\oddsidemargin}{-0.65in}
 \addtolength{\evensidemargin}{-0.65in}
 \addtolength{\textwidth}{1.3in}
-\addtolength{\topmargin}{-1.0in}
-\addtolength{\textheight}{2.2in}
+% Keep a visible breathing area above the name while preserving a one-page
+% layout. The previous -1.0in top correction pushed the header into the page
+% edge and made section content feel compressed.
+\addtolength{\topmargin}{-0.75in}
+\addtolength{\textheight}{1.95in}
 
 \urlstyle{same}
 
@@ -56,33 +59,34 @@
 % content — every skill, bullet point, date, and section heading
 % extracts correctly.
 \titleformat{\section}{
-  \vspace{-4pt}\raggedright\large\bfseries
-}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+  \raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule]
+\titlespacing*{\section}{0pt}{9pt}{5pt}
 
 \newcommand{\resumeItem}[1]{
-  \item\small{#1 \vspace{-1pt}}
+  \item\small{#1}
 }
 
 \newcommand{\resumeSubheading}[4]{
-  \vspace{-2pt}\item
+  \vspace{1pt}\item
     \begin{tabular*}{0.98\textwidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{#1} & #2 \\
       \textit{\small#3} & \textit{\small #4} \\
-    \end{tabular*}\vspace{-4pt}
+    \end{tabular*}\vspace{-2pt}
 }
 
 \newcommand{\resumeProjectHeading}[2]{
-    \item
+    \vspace{1pt}\item
     \begin{tabular*}{0.98\textwidth}{l@{\extracolsep{\fill}}r}
       \small#1 & #2 \\
-    \end{tabular*}\vspace{-4pt}
+    \end{tabular*}\vspace{-2pt}
 }
 
 \newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
-\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}, itemsep=3pt, topsep=3pt]}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}, itemsep=4pt, topsep=4pt]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.18in, label=-, itemsep=2pt, topsep=3pt]}
-\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-2pt}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.18in, label=-, itemsep=2pt, topsep=4pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{0pt}}
 
 \begin{document}
 
