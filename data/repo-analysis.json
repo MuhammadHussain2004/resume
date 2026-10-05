@@ -389,7 +389,7 @@
         "HTML"
       ],
       "stars": 0,
-      "pushed_at": "2026-10-04T22:01:33Z",
+      "pushed_at": "2026-10-04T22:24:26Z",
       "created_at": "2026-09-03T14:20:32Z",
       "score": 57,
       "full_stack": false,
@@ -605,7 +605,7 @@
         "TeX"
       ],
       "stars": 0,
-      "pushed_at": "2026-10-04T22:14:05Z",
+      "pushed_at": "2026-10-04T22:24:19Z",
       "created_at": "2026-09-04T21:32:31Z",
       "score": 32,
       "full_stack": false,
@@ -793,38 +793,6 @@
     },
     {
       "overall_rank": 18,
-      "name": "weather-app",
-      "description": "",
-      "url": "https://github.com/MuhammadHussain2004/weather-app",
-      "homepage": "",
-      "topics": [],
-      "languages": [
-        "JavaScript",
-        "CSS",
-        "HTML"
-      ],
-      "stars": 0,
-      "pushed_at": "2025-10-05T00:10:32Z",
-      "created_at": "2025-10-05T00:03:08Z",
-      "score": 22,
-      "full_stack": false,
-      "eligible": true,
-      "capabilities": [
-        "frontend"
-      ],
-      "feature_domains": [
-        "search/filtering",
-        "third-party integration",
-        "uploads/imports"
-      ],
-      "technologies": [],
-      "source_file_count": 3,
-      "test_file_count": 0,
-      "evidence_files": [],
-      "tree_scan_complete": true
-    },
-    {
-      "overall_rank": 19,
       "name": "Expense-Tracker",
       "description": "Expense tracker project using html css and Javacsript",
       "url": "https://github.com/MuhammadHussain2004/Expense-Tracker",
@@ -853,6 +821,38 @@
       "tree_scan_complete": true
     },
     {
+      "overall_rank": 19,
+      "name": "weather-app",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/weather-app",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2025-10-05T00:10:32Z",
+      "created_at": "2025-10-05T00:03:08Z",
+      "score": 21,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend"
+      ],
+      "feature_domains": [
+        "search/filtering",
+        "third-party integration",
+        "uploads/imports"
+      ],
+      "technologies": [],
+      "source_file_count": 3,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
       "overall_rank": 20,
       "name": "currency-converter",
       "description": "",
@@ -867,7 +867,7 @@
       "stars": 0,
       "pushed_at": "2025-10-05T00:13:08Z",
       "created_at": "2025-10-04T23:46:15Z",
-      "score": 20,
+      "score": 19,
       "full_stack": false,
       "eligible": true,
       "capabilities": [
@@ -898,7 +898,7 @@
       "stars": 0,
       "pushed_at": "2025-10-05T00:23:33Z",
       "created_at": "2025-10-04T23:55:03Z",
-      "score": 18,
+      "score": 17,
       "full_stack": false,
       "eligible": true,
       "capabilities": [
@@ -928,7 +928,7 @@
       "stars": 0,
       "pushed_at": "2025-10-05T00:18:27Z",
       "created_at": "2025-10-05T00:00:18Z",
-      "score": 18,
+      "score": 17,
       "full_stack": false,
       "eligible": true,
       "capabilities": [
@@ -958,7 +958,7 @@
       "stars": 0,
       "pushed_at": "2025-10-05T01:45:50Z",
       "created_at": "2025-10-04T23:34:01Z",
-      "score": 16,
+      "score": 15,
       "full_stack": false,
       "eligible": true,
       "capabilities": [
