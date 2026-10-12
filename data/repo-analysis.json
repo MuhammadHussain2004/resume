@@ -3,64 +3,6 @@
   "projects": [
     {
       "overall_rank": 1,
-      "name": "nodemart",
-      "description": "",
-      "url": "https://github.com/MuhammadHussain2004/nodemart",
-      "homepage": "https://nodemart-frontend.vercel.app/",
-      "topics": [],
-      "languages": [
-        "JavaScript",
-        "CSS",
-        "HTML"
-      ],
-      "stars": 0,
-      "pushed_at": "2026-10-12T04:08:37Z",
-      "created_at": "2026-10-12T02:11:21Z",
-      "score": 96,
-      "full_stack": true,
-      "eligible": true,
-      "capabilities": [
-        "frontend",
-        "backend",
-        "database",
-        "API layer",
-        "authentication/authorization",
-        "deployment",
-        "security/validation",
-        "separated frontend/backend architecture",
-        "media uploads",
-        "cloud media storage",
-        "owner-scoped operations",
-        "search/filter/sort/pagination"
-      ],
-      "feature_domains": [
-        "catalog/commerce",
-        "reviews/feedback",
-        "search/filtering",
-        "third-party integration",
-        "uploads/imports"
-      ],
-      "technologies": [
-        "Cloudinary",
-        "Express",
-        "JWT",
-        "Mongoose",
-        "Multer",
-        "Node.js",
-        "React",
-        "Vite"
-      ],
-      "source_file_count": 27,
-      "test_file_count": 0,
-      "evidence_files": [
-        "nodemart-backend/package.json",
-        "nodemart-frontend/package.json"
-      ],
-      "tree_scan_complete": true,
-      "readme_excerpt": "# NodeMart\n\nNodeMart is a full-stack product marketplace built with React, Node.js, Express, and MongoDB. Users can create an account, sign in, and manage their own products, including product images.\n\n## Live Demo\n\n- **Frontend:** [https://nodemart-frontend.vercel.app/](https://nodemart-frontend.vercel.app/)\n- **Backend API:** [https://nodemart.vercel.app/](https://nodemart.vercel.app/)\n\n## Features\n\n- User signup and login\n- JWT-based authentication\n- Create, view, update, and delete products\n- Users can manage only their own products\n- Product image uploads stored with Cloudinary\n- Product search by title\n- Filter products by minimum and maximum price\n- Sort and paginate product results\n- Responsive React single-page application\n\n## Tech Stack\n\n**Frontend**\n- React\n- Vite\n- React Router\n- JavaScript\n- Fetch API\n\n**Backend**\n- Node.js\n- Express\n- MongoDB Atlas\n- Mongoose\n- JSON Web Tokens (JWT)\n- bcrypt\n- Multer\n- Cloudinary\n\n**Deployment**\n- Vercel\n\n## Project Structure\n\n\nNodeMart/\n├── nodemart-backend/\n│   ├── config/\n│   ├── controllers/\n│   ├── middleware/\n│   ├── models/\n│   ├── routes/\n│   └── index.js\n└── nodemart-frontend/\n    ├── src/\n    └── package.json\n\n\n## Run Locally\n\nYou need Node.js, npm, and a MongoDB connection string to run this project locally.\n\n### 1. Set up the backend\n\n\ncd nodemart-backend\nnpm install\n\n\nCreate a `.env` file inside `nodemart-backend`:\n\n\nPORT=4000\nMONGO_URI=your_mongodb_connection_string\nSECRET_KEY=your_jwt_secret\nCLOUDINARY_CLOUD_NAME="
-    },
-    {
-      "overall_rank": 2,
       "name": "Complain-Management-System-MERN",
       "description": "Role-based complaint management platform (MERN) with JWT auth, an admin approval workflow, and a full complaint lifecycle.",
       "url": "https://github.com/MuhammadHussain2004/Complain-Management-System-MERN",
@@ -119,7 +61,7 @@
       "readme_excerpt": "# Smart Complaint Management System (MERN Stack)\n\nA centralized complaint management platform for an educational institution. Users register, wait for\nadmin approval, log in through a single login page, submit complaints, and track their status. Admins\nmanage users (approve/reject/activate/deactivate/roles) and manage the full complaint lifecycle.\n\n## Stack\n\n- **Frontend:** React (Vite, JSX) + React Router + Axios\n- **Backend:** Node.js + Express.js\n- **Database:** MongoDB + Mongoose\n- **Auth:** JWT + bcrypt password hashing, role-based route protection\n\n## Project Structure\n\n```\nHackathon/\n  backend/     Express API (auth, users, complaints)\n  frontend/    React app (Vite)\n```\n\n## Complaint Workflow\n\n```\nSubmit Complaint → Pending → Admin Review → In Progress → Resolved / Rejected\n```\n\n## Account Workflow\n\n```\nRegister → status: pending → Admin Approve/Reject → Login (role detected) → User/Admin Dashboard\n```\n\nA new registration is always a `user` with `pending` status — it can never self-promote to admin.\nThe first admin account is created via the seed script below.\n\n## Backend Setup\n\n```bash\ncd backend\nnpm install\ncp .env.example .env      # then edit MONGO_URI and JWT_SECRET\nnpm run seed:admin        # creates the initial admin account from .env\nnpm run dev                # starts on http://localhost:5000\n```\n\nInitial admin credentials are controlled by `ADMIN_EMAIL` / `ADMIN_PASSWORD` in `.env`\n(defaults: `admin@scms.com` / `Admin@12345` — change these before using the a"
     },
     {
-      "overall_rank": 3,
+      "overall_rank": 2,
       "name": "MuhammadHussain-mern-10pshine",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/MuhammadHussain-mern-10pshine",
@@ -170,6 +112,63 @@
       ],
       "tree_scan_complete": true,
       "readme_excerpt": "# MuhammadHussain-mern-10pshine\n\nA MERN notes application with backend and frontend components.\n\n## Project structure\n\n- `backend/` — Express API, MySQL database, authentication, notes logic\n- `frontend/` — React app for login, register, dashboard, and notes management\n\n## Run locally\n\n1. Start backend:\n   - `cd backend`\n   - `npm install`\n   - Copy `.env.example` to `.env` and fill in your MySQL credentials (the app auto-creates the database and tables on first run)\n   - `npm start`\n\n2. Start frontend:\n   - `cd frontend`\n   - `npm install`\n   - `npm start`\n\n## Deploying to Vercel (backend + frontend)\n\nBoth the backend and frontend can be deployed as separate Vercel projects.\n\n### Backend\n\n1. In Vercel, add the **TiDB Cloud** integration (Marketplace → TiDB Cloud) to provision a free MySQL-compatible database — this automatically injects `TIDB_HOST`, `TIDB_PORT`, `TIDB_USER`, `TIDB_PASSWORD`, and `TIDB_DATABASE` into your project's environment variables.\n2. Create a new Vercel project from this repo with **Root Directory** set to `backend`.\n3. Add these additional environment variables in the Vercel project settings: `JWT_SECRET`, `EMAIL_USER`, `EMAIL_PASS`, `BYPASS_EMAIL`.\n4. Deploy. The API will be served at `https://<your-backend-project>.vercel.app/api/...`.\n\n### Frontend\n\n1. Create a Vercel project from this repo with **Root Directory** set to `frontend`.\n2. Set the environment variable `REACT_APP_API_URL` to `https://<your-backend-project>.vercel.app/api`.\n3. Deploy (or"
+    },
+    {
+      "overall_rank": 3,
+      "name": "nodemart",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/nodemart",
+      "homepage": "https://nodemart-frontend.vercel.app/",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-10-12T04:08:37Z",
+      "created_at": "2026-10-12T02:11:21Z",
+      "score": 94,
+      "full_stack": true,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "backend",
+        "database",
+        "API layer",
+        "authentication/authorization",
+        "deployment",
+        "security/validation",
+        "separated frontend/backend architecture",
+        "media uploads",
+        "cloud media storage",
+        "owner-scoped operations",
+        "search/filter/sort/pagination"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "search/filtering",
+        "third-party integration",
+        "uploads/imports"
+      ],
+      "technologies": [
+        "Cloudinary",
+        "Express",
+        "JWT",
+        "Mongoose",
+        "Multer",
+        "Node.js",
+        "React",
+        "Vite"
+      ],
+      "source_file_count": 27,
+      "test_file_count": 0,
+      "evidence_files": [
+        "nodemart-backend/package.json",
+        "nodemart-frontend/package.json"
+      ],
+      "tree_scan_complete": true,
+      "readme_excerpt": "# NodeMart\n\nNodeMart is a full-stack product marketplace built with React, Node.js, Express, and MongoDB. Users can create an account, sign in, and manage their own products, including product images.\n\n## Live Demo\n\n- **Frontend:** [https://nodemart-frontend.vercel.app/](https://nodemart-frontend.vercel.app/)\n- **Backend API:** [https://nodemart.vercel.app/](https://nodemart.vercel.app/)\n\n## Features\n\n- User signup and login\n- JWT-based authentication\n- Create, view, update, and delete products\n- Users can manage only their own products\n- Product image uploads stored with Cloudinary\n- Product search by title\n- Filter products by minimum and maximum price\n- Sort and paginate product results\n- Responsive React single-page application\n\n## Tech Stack\n\n**Frontend**\n- React\n- Vite\n- React Router\n- JavaScript\n- Fetch API\n\n**Backend**\n- Node.js\n- Express\n- MongoDB Atlas\n- Mongoose\n- JSON Web Tokens (JWT)\n- bcrypt\n- Multer\n- Cloudinary\n\n**Deployment**\n- Vercel\n\n## Project Structure\n\n\nNodeMart/\n├── nodemart-backend/\n│   ├── config/\n│   ├── controllers/\n│   ├── middleware/\n│   ├── models/\n│   ├── routes/\n│   └── index.js\n└── nodemart-frontend/\n    ├── src/\n    └── package.json\n\n\n## Run Locally\n\nYou need Node.js, npm, and a MongoDB connection string to run this project locally.\n\n### 1. Set up the backend\n\n\ncd nodemart-backend\nnpm install\n\n\nCreate a `.env` file inside `nodemart-backend`:\n\n\nPORT=4000\nMONGO_URI=your_mongodb_connection_string\nSECRET_KEY=your_jwt_secret\nCLOUDINARY_CLOUD_NAME="
     },
     {
       "overall_rank": 4,
@@ -305,7 +304,7 @@
       "stars": 0,
       "pushed_at": "2026-08-27T23:21:04Z",
       "created_at": "2026-08-27T22:18:10Z",
-      "score": 82,
+      "score": 80,
       "full_stack": true,
       "eligible": true,
       "capabilities": [
@@ -319,7 +318,6 @@
         "separated frontend/backend architecture"
       ],
       "feature_domains": [
-        "reviews/feedback",
         "third-party integration"
       ],
       "technologies": [
@@ -399,7 +397,7 @@
       "stars": 0,
       "pushed_at": "2026-09-18T11:57:10Z",
       "created_at": "2026-09-18T11:57:00Z",
-      "score": 78,
+      "score": 76,
       "full_stack": true,
       "eligible": true,
       "capabilities": [
@@ -413,7 +411,6 @@
       ],
       "feature_domains": [
         "administration",
-        "reviews/feedback",
         "third-party integration"
       ],
       "technologies": [
@@ -463,7 +460,6 @@
       "feature_domains": [
         "catalog/commerce",
         "content/data management",
-        "reviews/feedback",
         "roles/permissions",
         "third-party integration",
         "uploads/imports",
@@ -515,7 +511,6 @@
         "database"
       ],
       "feature_domains": [
-        "administration",
         "catalog/commerce",
         "content/data management",
         "email/notifications",
@@ -588,7 +583,7 @@
       "stars": 0,
       "pushed_at": "2026-08-27T23:29:36Z",
       "created_at": "2026-08-17T04:16:08Z",
-      "score": 34,
+      "score": 32,
       "full_stack": false,
       "eligible": true,
       "capabilities": [
@@ -597,7 +592,6 @@
       ],
       "feature_domains": [
         "catalog/commerce",
-        "reviews/feedback",
         "search/filtering",
         "third-party integration"
       ],
@@ -614,46 +608,6 @@
     },
     {
       "overall_rank": 13,
-      "name": "paradise-nursery",
-      "description": "",
-      "url": "https://github.com/MuhammadHussain2004/paradise-nursery",
-      "homepage": "https://muhammadhussain2004.github.io/paradise-nursery/",
-      "topics": [],
-      "languages": [
-        "JavaScript",
-        "CSS",
-        "HTML"
-      ],
-      "stars": 0,
-      "pushed_at": "2026-09-03T14:20:07Z",
-      "created_at": "2026-08-28T19:35:39Z",
-      "score": 32,
-      "full_stack": false,
-      "eligible": true,
-      "capabilities": [
-        "frontend",
-        "deployment",
-        "state/data management"
-      ],
-      "feature_domains": [
-        "catalog/commerce",
-        "reviews/feedback",
-        "third-party integration"
-      ],
-      "technologies": [
-        "React",
-        "Redux Toolkit",
-        "Vite"
-      ],
-      "source_file_count": 17,
-      "test_file_count": 0,
-      "evidence_files": [
-        "package.json"
-      ],
-      "tree_scan_complete": true
-    },
-    {
-      "overall_rank": 14,
       "name": "resume",
       "description": "Auto-updating resume, synced daily from live GitHub activity",
       "url": "https://github.com/MuhammadHussain2004/resume",
@@ -664,7 +618,7 @@
         "TeX"
       ],
       "stars": 0,
-      "pushed_at": "2026-10-12T04:27:21Z",
+      "pushed_at": "2026-10-12T04:30:11Z",
       "created_at": "2026-09-04T21:32:31Z",
       "score": 32,
       "full_stack": false,
@@ -695,6 +649,45 @@
       "tree_scan_complete": true
     },
     {
+      "overall_rank": 14,
+      "name": "paradise-nursery",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/paradise-nursery",
+      "homepage": "https://muhammadhussain2004.github.io/paradise-nursery/",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-09-03T14:20:07Z",
+      "created_at": "2026-08-28T19:35:39Z",
+      "score": 30,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "deployment",
+        "state/data management"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "third-party integration"
+      ],
+      "technologies": [
+        "React",
+        "Redux Toolkit",
+        "Vite"
+      ],
+      "source_file_count": 17,
+      "test_file_count": 0,
+      "evidence_files": [
+        "package.json"
+      ],
+      "tree_scan_complete": true
+    },
+    {
       "overall_rank": 15,
       "name": "UI-project",
       "description": "Practicing Reactjs",
@@ -709,7 +702,7 @@
       "stars": 0,
       "pushed_at": "2026-07-02T20:37:45Z",
       "created_at": "2026-07-02T20:37:39Z",
-      "score": 27,
+      "score": 25,
       "full_stack": false,
       "eligible": true,
       "capabilities": [
@@ -718,7 +711,6 @@
       "feature_domains": [
         "catalog/commerce",
         "recommendation engine",
-        "reviews/feedback",
         "third-party integration"
       ],
       "technologies": [
@@ -748,7 +740,7 @@
       "stars": 0,
       "pushed_at": "2026-07-02T20:36:02Z",
       "created_at": "2026-07-02T20:35:57Z",
-      "score": 27,
+      "score": 25,
       "full_stack": false,
       "eligible": true,
       "capabilities": [
@@ -758,7 +750,6 @@
         "catalog/commerce",
         "content/data management",
         "recommendation engine",
-        "reviews/feedback",
         "third-party integration"
       ],
       "technologies": [
@@ -788,7 +779,7 @@
       "stars": 0,
       "pushed_at": "2026-07-02T20:34:16Z",
       "created_at": "2026-07-02T20:34:11Z",
-      "score": 25,
+      "score": 23,
       "full_stack": false,
       "eligible": true,
       "capabilities": [
@@ -797,7 +788,6 @@
       "feature_domains": [
         "catalog/commerce",
         "recommendation engine",
-        "reviews/feedback",
         "third-party integration"
       ],
       "technologies": [
@@ -827,7 +817,7 @@
       "stars": 0,
       "pushed_at": "2026-07-02T20:32:22Z",
       "created_at": "2026-07-02T20:32:13Z",
-      "score": 25,
+      "score": 23,
       "full_stack": false,
       "eligible": true,
       "capabilities": [
@@ -836,7 +826,6 @@
       "feature_domains": [
         "catalog/commerce",
         "recommendation engine",
-        "reviews/feedback",
         "third-party integration"
       ],
       "technologies": [
