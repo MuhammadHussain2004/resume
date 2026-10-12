@@ -115,6 +115,126 @@
     },
     {
       "overall_rank": 3,
+      "name": "nodemart",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/nodemart",
+      "homepage": "https://nodemart-frontend.vercel.app/",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-10-12T04:08:37Z",
+      "created_at": "2026-10-12T02:11:21Z",
+      "score": 94,
+      "full_stack": true,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "backend",
+        "database",
+        "API layer",
+        "authentication/authorization",
+        "deployment",
+        "security/validation",
+        "separated frontend/backend architecture",
+        "media uploads",
+        "cloud media storage"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "payments/subscriptions",
+        "reviews/feedback",
+        "search/filtering",
+        "third-party integration",
+        "uploads/imports"
+      ],
+      "technologies": [
+        "Cloudinary",
+        "Express",
+        "JWT",
+        "Mongoose",
+        "Multer",
+        "Node.js",
+        "React",
+        "Vite"
+      ],
+      "source_file_count": 27,
+      "test_file_count": 0,
+      "evidence_files": [
+        "nodemart-backend/package.json",
+        "nodemart-frontend/package.json"
+      ],
+      "tree_scan_complete": true,
+      "readme_excerpt": "# NodeMart\n\nNodeMart is a full-stack product marketplace built with React, Node.js, Express, and MongoDB. Users can create an account, sign in, and manage their own products, including product images.\n\n## Live Demo\n\n- **Frontend:** [https://nodemart-frontend.vercel.app/](https://nodemart-frontend.vercel.app/)\n- **Backend API:** [https://nodemart.vercel.app/](https://nodemart.vercel.app/)\n\n## Features\n\n- User signup and login\n- JWT-based authentication\n- Create, view, update, and delete products\n- Users can manage only their own products\n- Product image uploads stored with Cloudinary\n- Product search by title\n- Filter products by minimum and maximum price\n- Sort and paginate product results\n- Responsive React single-page application\n\n## Tech Stack\n\n**Frontend**\n- React\n- Vite\n- React Router\n- JavaScript\n- Fetch API\n\n**Backend**\n- Node.js\n- Express\n- MongoDB Atlas\n- Mongoose\n- JSON Web Tokens (JWT)\n- bcrypt\n- Multer\n- Cloudinary\n\n**Deployment**\n- Vercel\n\n## Project Structure\n\n\nNodeMart/\n├── nodemart-backend/\n│   ├── config/\n│   ├── controllers/\n│   ├── middleware/\n│   ├── models/\n│   ├── routes/\n│   └── index.js\n└── nodemart-frontend/\n    ├── src/\n    └── package.json\n\n\n## Run Locally\n\nYou need Node.js, npm, and a MongoDB connection string to run this project locally.\n\n### 1. Set up the backend\n\n\ncd nodemart-backend\nnpm install\n\n\nCreate a `.env` file inside `nodemart-backend`:\n\n\nPORT=4000\nMONGO_URI=your_mongodb_connection_string\nSECRET_KEY=your_jwt_secret\nCLOUDINARY_CLOUD_NAME="
+    },
+    {
+      "overall_rank": 4,
+      "name": "buildbot",
+      "description": "PC-build recommendation SaaS with a deterministic compatibility engine, a WordPress/WooCommerce plugin, and a store-owner dashboard (Final Year Project).",
+      "url": "https://github.com/MuhammadHussain2004/buildbot",
+      "homepage": "https://buildvolt.online",
+      "topics": [
+        "featured"
+      ],
+      "languages": [
+        "HTML",
+        "JavaScript",
+        "PHP",
+        "CSS",
+        "Python",
+        "PowerShell"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-07-02T22:12:10Z",
+      "created_at": "2026-06-30T08:04:44Z",
+      "score": 93,
+      "full_stack": true,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "backend",
+        "database",
+        "API layer",
+        "authentication/authorization",
+        "deployment",
+        "security/validation",
+        "separated frontend/backend architecture",
+        "media uploads"
+      ],
+      "feature_domains": [
+        "administration",
+        "analytics",
+        "catalog/commerce",
+        "email/notifications",
+        "payments/subscriptions",
+        "recommendation engine",
+        "third-party integration",
+        "uploads/imports"
+      ],
+      "technologies": [
+        "Express",
+        "JWT",
+        "Multer",
+        "Node.js",
+        "OAuth",
+        "SQLite",
+        "Turso/libSQL",
+        "Vite"
+      ],
+      "source_file_count": 31,
+      "test_file_count": 0,
+      "evidence_files": [
+        "dashboard/package.json",
+        "server/package.json"
+      ],
+      "tree_scan_complete": true,
+      "readme_excerpt": "# BuildBot\n\nBuildBot is an AI-powered product recommendation widget designed for e-commerce stores. It seamlessly integrates into store websites to provide shoppers with personalized product recommendations (like PC builds) based on their budget, purpose, and preferences.\n\n## 🚀 Features\n\n*   **AI Recommendation Engine:** Utilizes advanced AI (Anthropic Claude) to generate accurate and personalized product recommendations based on store catalogs.\n*   **WooCommerce Integration:** Comes with a dedicated WordPress/WooCommerce plugin for seamless product syncing, real-time catalog updates, and automated widget injection.\n*   **Custom Store Support:** Provides a manual catalog mode with CSV upload functionality, allowing integration with any e-commerce platform.\n*   **Store Owner Dashboard:** A comprehensive, vanilla JS dashboard for store owners to:\n    *   Manage product catalogs.\n    *   Customize widget appearance (branding, messaging, colors).\n    *   View detailed recommendation analytics and insights.\n    *   Manage billing and subscriptions.\n*   **Admin Panel:** A centralized control panel for platform administrators to monitor overall metrics, manage stores, handle billing, and oversee platform health.\n*   **Embedded Widget:** A lightweight, customizable, shopper-facing widget that floats on the store's frontend, providing an intuitive multi-step consultation process.\n*   **Automated Drip Emails:** Built-in email campaigns for onboarding, trial expiration warnings, and dun"
+    },
+    {
+      "overall_rank": 5,
       "name": "shopco-ecommerce",
       "description": "Full MERN e-commerce site, a pixel-faithful rebuild of a community Figma template.",
       "url": "https://github.com/MuhammadHussain2004/shopco-ecommerce",
@@ -170,68 +290,7 @@
       "readme_excerpt": "# SHOP.CO — E-commerce Website\n\nA pixel-faithful rebuild of the \"Shop.co\" Figma community template, built as a full MERN stack app.\n\n- **Frontend**: React (Vite), plain CSS\n- **Backend**: Node.js + Express\n- **Database**: MongoDB (Atlas)\n\n## Project structure\n\n```\nfrontend/   React app (Home, Shop, Product Detail, Cart, Checkout)\nbackend/    Express REST API + MongoDB models\n```\n\n## Local setup\n\n### 1. Backend\n\n```\ncd backend\nnpm install\ncp .env.example .env   # then fill in MONGODB_URI\nnpm run seed            # seeds products, reviews, testimonials, promo codes\nnpm run dev              # runs on http://localhost:5000\n```\n\n### 2. Frontend\n\n```\ncd frontend\nnpm install\ncp .env.example .env   # VITE_API_URL=http://localhost:5000 (already the default)\nnpm run dev              # runs on http://localhost:5173\n```\n\nTry promo code `SAVE20` on the Cart page for a working discount example.\n\n## Deployment (Vercel + MongoDB Atlas)\n\nBoth `frontend` and `backend` deploy as **separate Vercel projects** from the same GitHub repo (each with its own \"Root Directory\" setting).\n\n1. **MongoDB Atlas**: create a free M0 cluster, a database user, allow network access from `0.0.0.0/0`, and copy the connection string.\n2. **Backend on Vercel**: New Project → import this repo → Root Directory = `backend` → Environment Variables: `MONGODB_URI`, `CLIENT_URL` (the frontend's Vercel URL, set after step 3). Deploy, then run `npm run seed` locally once against the Atlas URI to populate the database.\n3. **Fron"
     },
     {
-      "overall_rank": 4,
-      "name": "buildbot",
-      "description": "PC-build recommendation SaaS with a deterministic compatibility engine, a WordPress/WooCommerce plugin, and a store-owner dashboard (Final Year Project).",
-      "url": "https://github.com/MuhammadHussain2004/buildbot",
-      "homepage": "https://buildvolt.online",
-      "topics": [
-        "featured"
-      ],
-      "languages": [
-        "HTML",
-        "JavaScript",
-        "PHP",
-        "CSS",
-        "Python",
-        "PowerShell"
-      ],
-      "stars": 0,
-      "pushed_at": "2026-07-02T22:12:10Z",
-      "created_at": "2026-06-30T08:04:44Z",
-      "score": 91,
-      "full_stack": true,
-      "eligible": true,
-      "capabilities": [
-        "frontend",
-        "backend",
-        "database",
-        "API layer",
-        "authentication/authorization",
-        "deployment",
-        "security/validation",
-        "separated frontend/backend architecture"
-      ],
-      "feature_domains": [
-        "administration",
-        "analytics",
-        "catalog/commerce",
-        "email/notifications",
-        "payments/subscriptions",
-        "recommendation engine",
-        "third-party integration",
-        "uploads/imports"
-      ],
-      "technologies": [
-        "Express",
-        "JWT",
-        "Node.js",
-        "OAuth",
-        "SQLite",
-        "Turso/libSQL",
-        "Vite"
-      ],
-      "source_file_count": 31,
-      "test_file_count": 0,
-      "evidence_files": [
-        "dashboard/package.json",
-        "server/package.json"
-      ],
-      "tree_scan_complete": true,
-      "readme_excerpt": "# BuildBot\n\nBuildBot is an AI-powered product recommendation widget designed for e-commerce stores. It seamlessly integrates into store websites to provide shoppers with personalized product recommendations (like PC builds) based on their budget, purpose, and preferences.\n\n## 🚀 Features\n\n*   **AI Recommendation Engine:** Utilizes advanced AI (Anthropic Claude) to generate accurate and personalized product recommendations based on store catalogs.\n*   **WooCommerce Integration:** Comes with a dedicated WordPress/WooCommerce plugin for seamless product syncing, real-time catalog updates, and automated widget injection.\n*   **Custom Store Support:** Provides a manual catalog mode with CSV upload functionality, allowing integration with any e-commerce platform.\n*   **Store Owner Dashboard:** A comprehensive, vanilla JS dashboard for store owners to:\n    *   Manage product catalogs.\n    *   Customize widget appearance (branding, messaging, colors).\n    *   View detailed recommendation analytics and insights.\n    *   Manage billing and subscriptions.\n*   **Admin Panel:** A centralized control panel for platform administrators to monitor overall metrics, manage stores, handle billing, and oversee platform health.\n*   **Embedded Widget:** A lightweight, customizable, shopper-facing widget that floats on the store's frontend, providing an intuitive multi-step consultation process.\n*   **Automated Drip Emails:** Built-in email campaigns for onboarding, trial expiration warnings, and dun"
-    },
-    {
-      "overall_rank": 5,
+      "overall_rank": 6,
       "name": "full-stack-auth",
       "description": "Full-stack authentication app with a React and Vite frontend and an Express backend with signup, login, JWT-protected profiles, and JSON user storage.",
       "url": "https://github.com/MuhammadHussain2004/full-stack-auth",
@@ -279,7 +338,7 @@
       "readme_excerpt": "<h1 align=\"center\">Welcome 👋</h1>\n<p>\n</p>\n\n## Show your support\n\nGive a ⭐️ if this project helped you!\n\n***\n_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_\n"
     },
     {
-      "overall_rank": 6,
+      "overall_rank": 7,
       "name": "students-Records-app",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/students-Records-app",
@@ -323,11 +382,10 @@
       "evidence_files": [
         "package.json"
       ],
-      "tree_scan_complete": true,
-      "readme_excerpt": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).\n\n## Getting Started\n\nFirst, run the development server:\n\n```bash\nnpm run dev\n# or\nyarn dev\n# or\npnpm dev\n# or\nbun dev\n```\n\nOpen [http://localhost:3000](http://localhost:3000) with your browser to see the result.\n\nYou can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.\n\nThis project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.\n\n## Learn More\n\nTo learn more about Next.js, take a look at the following resources:\n\n- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.\n- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.\n\nYou can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!\n\n## Deploy on Vercel\n\nThe easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.\n\nCheck out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.\n"
+      "tree_scan_complete": true
     },
     {
-      "overall_rank": 7,
+      "overall_rank": 8,
       "name": "ShopGuard",
       "description": "The purpose of this project is to develop a role based access system. Authentication and Authorization is the priority of this project",
       "url": "https://github.com/MuhammadHussain2004/ShopGuard",
@@ -376,7 +434,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 8,
+      "overall_rank": 9,
       "name": "My-Portfolio",
       "description": "Muhammad Hussain — MERN Stack Developer Portfolio",
       "url": "https://github.com/MuhammadHussain2004/My-Portfolio",
@@ -429,7 +487,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 9,
+      "overall_rank": 10,
       "name": "Railway_Reservation_System_Java_Netbeans",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/Railway_Reservation_System_Java_Netbeans",
@@ -476,7 +534,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 10,
+      "overall_rank": 11,
       "name": "Wanderly-Travel-Recommendation",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/Wanderly-Travel-Recommendation",
@@ -515,7 +573,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 11,
+      "overall_rank": 12,
       "name": "Multi-pages-website-react",
       "description": "ecoomerce multi pages websites",
       "url": "https://github.com/MuhammadHussain2004/Multi-pages-website-react",
@@ -554,7 +612,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 12,
+      "overall_rank": 13,
       "name": "paradise-nursery",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/paradise-nursery",
@@ -594,7 +652,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 13,
+      "overall_rank": 14,
       "name": "resume",
       "description": "Auto-updating resume, synced daily from live GitHub activity",
       "url": "https://github.com/MuhammadHussain2004/resume",
@@ -605,7 +663,7 @@
         "TeX"
       ],
       "stars": 0,
-      "pushed_at": "2026-10-10T09:19:48Z",
+      "pushed_at": "2026-10-12T04:21:54Z",
       "created_at": "2026-09-04T21:32:31Z",
       "score": 32,
       "full_stack": false,
@@ -636,7 +694,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 14,
+      "overall_rank": 15,
       "name": "UI-project",
       "description": "Practicing Reactjs",
       "url": "https://github.com/MuhammadHussain2004/UI-project",
@@ -675,7 +733,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 15,
+      "overall_rank": 16,
       "name": "Notes-app",
       "description": "Practicing Reactjs",
       "url": "https://github.com/MuhammadHussain2004/Notes-app",
@@ -715,7 +773,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 16,
+      "overall_rank": 17,
       "name": "Gallery-project",
       "description": "Practicing Reactjs",
       "url": "https://github.com/MuhammadHussain2004/Gallery-project",
@@ -754,7 +812,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 17,
+      "overall_rank": 18,
       "name": "Card-project",
       "description": "practicing reactjs",
       "url": "https://github.com/MuhammadHussain2004/Card-project",
@@ -792,7 +850,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 18,
+      "overall_rank": 19,
       "name": "Expense-Tracker",
       "description": "Expense tracker project using html css and Javacsript",
       "url": "https://github.com/MuhammadHussain2004/Expense-Tracker",
@@ -821,7 +879,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 19,
+      "overall_rank": 20,
       "name": "weather-app",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/weather-app",
@@ -853,7 +911,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 20,
+      "overall_rank": 21,
       "name": "currency-converter",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/currency-converter",
@@ -884,7 +942,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 21,
+      "overall_rank": 22,
       "name": "animated-portfolio-design",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/animated-portfolio-design",
@@ -914,7 +972,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 22,
+      "overall_rank": 23,
       "name": "to-do-list",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/to-do-list",
@@ -944,7 +1002,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 23,
+      "overall_rank": 24,
       "name": "stone-paper-scissor",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/stone-paper-scissor",
@@ -972,7 +1030,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 24,
+      "overall_rank": 25,
       "name": "tic-tac-toe-game",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/tic-tac-toe-game",
@@ -1000,7 +1058,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 25,
+      "overall_rank": 26,
       "name": "memory-card-game",
       "description": "A simple and interactive memory card matching game built with HTML, CSS, and JavaScript. Players flip cards to find matching pairs, testing focus and memory skills with smooth animations and responsive design.",
       "url": "https://github.com/MuhammadHussain2004/memory-card-game",
@@ -1032,7 +1090,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 26,
+      "overall_rank": 27,
       "name": "basecamp-trial",
       "description": "Multi-page adventure gear rental website built with HTML & CSS",
       "url": "https://github.com/MuhammadHussain2004/basecamp-trial",
@@ -1059,7 +1117,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 27,
+      "overall_rank": 28,
       "name": "Responsive-Forms",
       "description": "responsive forms. All forms related html topics are covered",
       "url": "https://github.com/MuhammadHussain2004/Responsive-Forms",
@@ -1086,7 +1144,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 28,
+      "overall_rank": 29,
       "name": "Railway-Management-system-project-java-netbeans",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/Railway-Management-system-project-java-netbeans",
@@ -1113,7 +1171,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 29,
+      "overall_rank": 30,
       "name": "microsoft-clone-website-Tailwind",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/microsoft-clone-website-Tailwind",
