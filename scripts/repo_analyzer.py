@@ -91,6 +91,8 @@ TECHNOLOGIES = {
     "Socket.IO": ("socket.io", "socketio", "websocket"),
     "Zod": ("zod",),
     "Stripe": ("stripe",),
+    "Cloudinary": ("cloudinary",),
+    "Multer": ("multer",),
 }
 
 FRONTEND_TECH = {"React", "Next.js", "Vue", "Angular", "Svelte"}
@@ -252,6 +254,8 @@ def analyze_repository(repo, tree_entries, readme, manifest_texts, languages):
     )
     realtime = "Socket.IO" in technology_set
     state_management = _contains_any(code_searchable, ("@reduxjs/toolkit", "redux toolkit", "zustand", "react-query", "tanstack"))
+    media_uploads = bool(technology_set & {"Cloudinary", "Multer"})
+    cloud_media_storage = "Cloudinary" in technology_set
     split_architecture = frontend and backend and _path_has(
         paths, ("frontend/", "client/", "backend/", "server/", "api/")
     )
@@ -276,6 +280,8 @@ def analyze_repository(repo, tree_entries, readme, manifest_texts, languages):
             (realtime, "real-time features"),
             (state_management, "state/data management"),
             (split_architecture, "separated frontend/backend architecture"),
+            (media_uploads, "media uploads"),
+            (cloud_media_storage, "cloud media storage"),
         )
         if present
     ]
@@ -297,6 +303,8 @@ def analyze_repository(repo, tree_entries, readme, manifest_texts, languages):
         + (2 if security else 0)
         + (2 if realtime else 0)
         + (2 if state_management else 0)
+        + (2 if media_uploads else 0)
+        + (2 if cloud_media_storage else 0)
         + (2 if "TypeScript" in technology_set else 0)
         + substance
         + feature_breadth
