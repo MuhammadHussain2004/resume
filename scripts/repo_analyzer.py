@@ -105,16 +105,16 @@ AUTH_TECH = {"JWT", "OAuth"}
 TEST_TECH = {"Jest", "Vitest", "Playwright", "Cypress", "Pytest"}
 
 FEATURE_DOMAINS = {
-    "administration": ("admin", "dashboard"),
+    "administration": ("admin dashboard", "admin panel", "administration"),
     "analytics": ("analytics", "reporting", "statistics"),
     "catalog/commerce": ("catalog", "product", "cart", "checkout", "order"),
     "payments/subscriptions": ("payment", "stripe", "subscription", "billing"),
     "recommendation engine": ("recommend", "compatibility engine", "suggestion"),
     "uploads/imports": ("upload", "import", "csv", "excel"),
-    "email/notifications": ("email", "notification", "resend"),
-    "reviews/feedback": ("review", "testimonial", "feedback"),
+    "email/notifications": ("email notification", "email verification", "send email", "nodemailer", "notification"),
+    "reviews/feedback": ("product review", "customer review", "reviews", "testimonial", "feedback"),
     "search/filtering": ("search", "filter", "pagination"),
-    "workflow/state machine": ("workflow", "complaint", "ticket", "status"),
+    "workflow/state machine": ("workflow", "complaint", "ticket", "state machine"),
     "roles/permissions": ("role-based", "rbac", "permission", "admin-only"),
     "third-party integration": ("plugin", "woocommerce", "webhook", "integration"),
     "content/data management": ("notes", "records", "content management"),
@@ -402,7 +402,9 @@ def analyze_github_repositories(gh_get, username, max_projects=3):
 
     owned_repos = [
         repo for repo in repos
-        if not repo.get("fork") and repo.get("name", "").lower() != username.lower()
+        if not repo.get("fork")
+        and repo.get("name", "").lower() != username.lower()
+        and repo.get("name", "").lower() not in {"resume", "my-portfolio"}
     ]
     known_repo_urls = {repo["html_url"].rstrip("/") for repo in owned_repos}
     summaries = []
