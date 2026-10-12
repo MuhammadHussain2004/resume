@@ -125,6 +125,14 @@ def _contains_any(text: str, terms: tuple[str, ...] | list[str]) -> bool:
     return any(term in text for term in terms)
 
 
+def _contains_feature_term(text: str, term: str) -> bool:
+    """Match feature words at token starts, avoiding hits such as `preview` -> `review`."""
+    return re.search(
+        rf"(?<![a-z0-9]){re.escape(term)}[a-z0-9]*(?![a-z0-9])",
+        text,
+    ) is not None
+
+
 def _current_readme_scope(readme: str) -> str:
     """Ignore roadmap prose so planned features do not count as implemented."""
     return re.split(
@@ -279,7 +287,9 @@ def analyze_repository(repo, tree_entries, readme, manifest_texts, languages):
     )
     full_stack = frontend and backend and database
     feature_domains = sorted(
-        label for label, terms in FEATURE_DOMAINS.items() if _contains_any(feature_searchable, terms)
+        label
+        for label, terms in FEATURE_DOMAINS.items()
+        if any(_contains_feature_term(feature_searchable, term) for term in terms)
     )
 
     capabilities = [
