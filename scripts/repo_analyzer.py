@@ -208,8 +208,8 @@ def _recency_points(pushed_at: str | None) -> int:
         return 0
 
 
-def analyze_repository(repo, tree_entries, readme, manifest_texts, languages):
-    """Analyze a repository from its complete tree and high-value code manifests."""
+def analyze_repository(repo, tree_entries, readme, manifest_texts, languages, code_text=""):
+    """Analyze a repository from its complete tree, manifests, and implementation excerpts."""
     paths = [entry.get("path", "").lower() for entry in tree_entries if entry.get("type") == "blob"]
     source_files = sum(1 for path in paths if any(path.endswith(ext) for ext in SOURCE_EXTENSIONS))
     test_files = sum(
@@ -226,6 +226,7 @@ def analyze_repository(repo, tree_entries, readme, manifest_texts, languages):
             " ".join(languages.keys() if isinstance(languages, dict) else languages),
             "\n".join(paths),
             "\n".join(manifest_texts.values()),
+            code_text,
         ]
     ).lower()
     current_readme = _current_readme_scope(readme)
@@ -450,7 +451,36 @@ def analyze_github_repositories(gh_get, username, max_projects=3):
             for path in manifest_paths
         }
 
-        analysis = analyze_repository(repo, tree_entries, readme, manifest_texts, languages)
+        # Read representative implementation files for every repository before
+        # ranking. README/manifests alone can miss a strong but under-documented
+        # project. Keep the sample bounded so the all-repository scan stays
+        # within GitHub API and workflow time budgets.
+        code_evidence = []
+        code_chars = 0
+        for path in select_code_evidence_paths(tree_entries, limit=8):
+            content = _fetch_text(
+                lambda api_path, params=None: gh_get(api_path.replace("{owner}", username), params=params),
+                name,
+                path,
+            )
+            if not content.strip():
+                continue
+            excerpt = _redact_sensitive_assignments(content[:2200])
+            remaining = 16_000 - code_chars
+            if remaining <= 0:
+                break
+            excerpt = excerpt[:remaining]
+            code_evidence.append({"path": path, "excerpt": excerpt})
+            code_chars += len(excerpt)
+
+        analysis = analyze_repository(
+            repo,
+            tree_entries,
+            readme,
+            manifest_texts,
+            languages,
+            "\n".join(item["excerpt"] for item in code_evidence),
+        )
         summary = {
             "name": name,
             "description": repo.get("description") or "",
@@ -469,6 +499,7 @@ def analyze_github_repositories(gh_get, username, max_projects=3):
         repo_artifacts[repo["html_url"].rstrip("/")] = {
             "tree_entries": tree_entries,
             "manifest_texts": manifest_texts,
+            "code_evidence": code_evidence,
         }
         print(
             f"  score={analysis['score']} full_stack={analysis['full_stack']} "
@@ -500,25 +531,6 @@ def analyze_github_repositories(gh_get, username, max_projects=3):
             continue
 
         artifacts = repo_artifacts[normalized_url]
-        evidence_paths = select_code_evidence_paths(artifacts["tree_entries"])
-        code_evidence = []
-        evidence_chars = 0
-        for path in evidence_paths:
-            content = _fetch_text(
-                lambda api_path, params=None: gh_get(api_path.replace("{owner}", username), params=params),
-                summary["name"],
-                path,
-            )
-            if not content.strip():
-                continue
-            excerpt = _redact_sensitive_assignments(content[:3500])
-            remaining = 24_000 - evidence_chars
-            if remaining <= 0:
-                break
-            excerpt = excerpt[:remaining]
-            code_evidence.append({"path": path, "excerpt": excerpt})
-            evidence_chars += len(excerpt)
-
         manifest_evidence = {}
         manifest_chars = 0
         for path, content in artifacts["manifest_texts"].items():
@@ -531,7 +543,7 @@ def analyze_github_repositories(gh_get, username, max_projects=3):
             manifest_evidence[path] = excerpt
             manifest_chars += len(excerpt)
         summary["dependency_manifest_evidence"] = manifest_evidence
-        summary["code_evidence"] = code_evidence
+        summary["code_evidence"] = artifacts["code_evidence"]
 
     summaries.sort(
         key=lambda item: (
