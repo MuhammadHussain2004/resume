@@ -125,6 +125,15 @@ def _contains_any(text: str, terms: tuple[str, ...] | list[str]) -> bool:
     return any(term in text for term in terms)
 
 
+def _current_readme_scope(readme: str) -> str:
+    """Ignore roadmap prose so planned features do not count as implemented."""
+    return re.split(
+        r"(?im)^\s*#{1,6}\s*(?:future improvements?|future work|roadmap|planned features|next steps)\b.*$",
+        readme,
+        maxsplit=1,
+    )[0]
+
+
 def _path_has(paths: list[str], patterns: tuple[str, ...]) -> bool:
     return any(any(pattern in path for pattern in patterns) for path in paths)
 
@@ -211,7 +220,8 @@ def analyze_repository(repo, tree_entries, readme, manifest_texts, languages):
             "\n".join(manifest_texts.values()),
         ]
     ).lower()
-    feature_searchable = f"{code_searchable}\n{readme.lower()}"
+    current_readme = _current_readme_scope(readme)
+    feature_searchable = f"{code_searchable}\n{current_readme.lower()}"
 
     technologies = sorted(
         label for label, aliases in TECHNOLOGIES.items() if _contains_any(code_searchable, aliases)
@@ -256,6 +266,14 @@ def analyze_repository(repo, tree_entries, readme, manifest_texts, languages):
     state_management = _contains_any(code_searchable, ("@reduxjs/toolkit", "redux toolkit", "zustand", "react-query", "tanstack"))
     media_uploads = bool(technology_set & {"Cloudinary", "Multer"})
     cloud_media_storage = "Cloudinary" in technology_set
+    owner_scoped_operations = (
+        _contains_any(current_readme.lower(), ("only their own", "only their own products", "own products"))
+        and _path_has(paths, ("controllers/", "middleware/", "models/"))
+    )
+    rich_catalog_queries = _contains_any(
+        current_readme.lower(),
+        ("search by title", "sort and paginate", "price filters", "filter products"),
+    )
     split_architecture = frontend and backend and _path_has(
         paths, ("frontend/", "client/", "backend/", "server/", "api/")
     )
@@ -282,6 +300,8 @@ def analyze_repository(repo, tree_entries, readme, manifest_texts, languages):
             (split_architecture, "separated frontend/backend architecture"),
             (media_uploads, "media uploads"),
             (cloud_media_storage, "cloud media storage"),
+            (owner_scoped_operations, "owner-scoped operations"),
+            (rich_catalog_queries, "search/filter/sort/pagination"),
         )
         if present
     ]
@@ -305,6 +325,8 @@ def analyze_repository(repo, tree_entries, readme, manifest_texts, languages):
         + (2 if state_management else 0)
         + (2 if media_uploads else 0)
         + (2 if cloud_media_storage else 0)
+        + (2 if owner_scoped_operations else 0)
+        + (2 if rich_catalog_queries else 0)
         + (2 if "TypeScript" in technology_set else 0)
         + substance
         + feature_breadth
