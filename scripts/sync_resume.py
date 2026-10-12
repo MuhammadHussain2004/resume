@@ -359,10 +359,17 @@ def extract_skill_tokens(tex):
 
 
 def extract_project_urls(tex):
+    return set(extract_project_url_order(tex))
+
+
+def extract_project_url_order(tex):
     match = re.search(r"\\section\{Projects\}(.*?)(?=\\section\{|\Z)", tex, re.DOTALL)
     if not match:
-        return set()
-    return set(re.findall(r"https://github\.com/\S+?(?=[}\s])", match.group(1)))
+        return []
+    return [
+        url.rstrip("/")
+        for url in re.findall(r"https://github\.com/\S+?(?=[}\s])", match.group(1))
+    ]
 
 
 def validate_structure(
@@ -371,6 +378,7 @@ def validate_structure(
     source_haystack,
     known_repo_urls,
     selected_project_urls,
+    selected_project_order,
     allowed_deferred_skills=None,
 ):
     """Mechanically checks the model's output against the hard rules given
@@ -424,6 +432,13 @@ def validate_structure(
         problems.append(
             "Projects do not exactly match the deterministic top-ranked repositories. "
             f"Expected {sorted(selected_project_urls)}, got {sorted(normalized_project_urls)}"
+        )
+
+    project_order = extract_project_url_order(new_tex)
+    if project_order != selected_project_order:
+        problems.append(
+            "Projects are not ordered by the deterministic ranking. "
+            f"Expected {selected_project_order}, got {project_order}"
         )
 
     return problems
@@ -496,6 +511,14 @@ def main():
             f"Expected {MAX_RESUME_PROJECTS} eligible projects, found {len(selected_project_urls)}; "
             "leaving the resume unchanged."
         )
+    selected_project_order = [
+        summary["url"].rstrip("/")
+        for summary in sorted(
+            repo_summaries,
+            key=lambda item: item.get("resume_rank") or 9999,
+        )
+        if summary["url"].rstrip("/") in selected_project_urls
+    ]
     print(f"Deterministic resume projects: {sorted(selected_project_urls)}")
     system, user = build_prompt(
         current_tex,
@@ -542,6 +565,7 @@ def main():
             user,
             known_repo_urls,
             selected_project_urls,
+            selected_project_order,
             allowed_deferred_skills,
         )
         if problems:
