@@ -10,6 +10,8 @@ This file is a durable project-memory record of the work discussed in the AI cha
 - GitHub profile commit `e757f76` labels NextSkill and SMIT as Training rather than verified Certification and guards future generation. Its workflow `39416000372` passed and generated commit `302d088` retained the classification and the current BSCS Graduate tagline.
 - The resume repo, portfolio repo, live portfolio PDF, `D:\general data`, and the local OneDrive Resume folder all have the same SHA-256 PDF: `f2bd8286bf6d744070461192f0ace7192d8bda3acf35c93c43d544198731fbda`. OneDrive cloud delivery beyond the local synced folder was not independently verified. The optional `G:\My Drive` mount was unavailable; direct GitHub Actions Google Drive upload succeeded.
 
+- Live desktop/mobile portfolio audit found no console errors, failed page requests, or broken internal anchors. All project demos, GitHub/proof links, and the resume PDF returned HTTP 200. LinkedIn rejected automated HEAD checks with 405/999, which is inconclusive rather than a confirmed broken link; the portfolio audit now reports that separately and passes when all verifiable checks pass. Portfolio operating guidance and the local-score fallback exclusion list were updated to prevent stale metadata or profile/resume repos entering project cards.
+
 ## Original context
 
 - The initial conversation database referenced by the user was `C:\Users\mhkpl\.gemini\antigravity-ide\conversations\b1b828bb-08da-4627-a624-f89dd1d704e7.db`.
