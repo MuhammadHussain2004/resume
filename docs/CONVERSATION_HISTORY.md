@@ -12,6 +12,8 @@ This file is a durable project-memory record of the work discussed in the AI cha
 
 - Live desktop/mobile portfolio audit found no console errors, failed page requests, or broken internal anchors. All project demos, GitHub/proof links, and the resume PDF returned HTTP 200. LinkedIn rejected automated HEAD checks with 405/999, which is inconclusive rather than a confirmed broken link; the portfolio audit now reports that separately and passes when all verifiable checks pass. Portfolio operating guidance and the local-score fallback exclusion list were updated to prevent stale metadata or profile/resume repos entering project cards.
 
+- The portfolio and profile generators now validate credential classification only while the corresponding entry exists in the authoritative resume; portfolio proof-link labels must match the actual LaTeX `\\href` labels. This preserves today's corrections without blocking an explicitly removed/replaced training course or future proof-label change. The resume Gemini instruction likewise applies training classification only when that training is present.
+
 ## Original context
 
 - The initial conversation database referenced by the user was `C:\Users\mhkpl\.gemini\antigravity-ide\conversations\b1b828bb-08da-4627-a624-f89dd1d704e7.db`.
