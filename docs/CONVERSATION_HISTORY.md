@@ -2,6 +2,14 @@
 
 This file is a durable project-memory record of the work discussed in the AI chat. It is intentionally kept inside the repository so a future assistant can understand the architecture and previous decisions without relying on the original chat session. It does not contain OAuth secrets, refresh tokens, client-secret JSON, or private keys.
 
+## 2026-10-20 audit and corrections
+
+- Reclassified NextSkill Institute's NAVTTC/IBM-aligned Full Stack Development course from Experience to a training entry under Certifications. The 10Pearls internship remains Experience and its proof-link label is `Verify`; the IBM/Coursera credential link label is `Certificate`. No unverified course was claimed as a certificate. Resume source commit `a67af23` and PDF commit `6780485`; the compiled PDF is one page (126030 bytes), with the complete Technical Skills section visible.
+- Found a real CI fault: a resume-source push run was marked successful but skipped PDF compilation because the default shallow checkout could not compare the previous commit. Fixed change detection with full checkout and the push before/after SHAs in commit `a947738`. Manual recompile run `39406068844` passed, updated the existing Google Drive resume file, and dispatched portfolio/profile sync.
+- Portfolio commit `0ca3654` separates work/education from Certifications & Training, preserves the corrected proof labels, updates the committed content fallback (including Multer/Cloudinary), and regenerates the current ranked top six from all public repos: SCMS, 10Pearls Notes, NodeMart, BuildVolt, SHOP.CO, Student Records. Lint/build and deployment run `39415870787` passed; live DOM confirmed the section placement, labels, and project order.
+- GitHub profile commit `e757f76` labels NextSkill and SMIT as Training rather than verified Certification and guards future generation. Its workflow `39416000372` passed and generated commit `302d088` retained the classification and the current BSCS Graduate tagline.
+- The resume repo, portfolio repo, live portfolio PDF, `D:\general data`, and the local OneDrive Resume folder all have the same SHA-256 PDF: `f2bd8286bf6d744070461192f0ace7192d8bda3acf35c93c43d544198731fbda`. OneDrive cloud delivery beyond the local synced folder was not independently verified. The optional `G:\My Drive` mount was unavailable; direct GitHub Actions Google Drive upload succeeded.
+
 ## Original context
 
 - The initial conversation database referenced by the user was `C:\Users\mhkpl\.gemini\antigravity-ide\conversations\b1b828bb-08da-4627-a624-f89dd1d704e7.db`.
