@@ -1047,6 +1047,35 @@
     },
     {
       "overall_rank": 26,
+      "name": "Hackathon-website",
+      "description": "HCM Lite static hackathon website built with HTML, CSS and Bootstrap",
+      "url": "https://github.com/MuhammadHussain2004/Hackathon-website",
+      "homepage": "https://hackathon-website-mu-five.vercel.app",
+      "topics": [],
+      "languages": [
+        "HTML",
+        "CSS"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-10-25T01:43:17Z",
+      "created_at": "2026-10-25T01:43:04Z",
+      "score": 12,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [
+        "deployment"
+      ],
+      "feature_domains": [
+        "content/data management"
+      ],
+      "technologies": [],
+      "source_file_count": 13,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 27,
       "name": "Responsive-Forms",
       "description": "responsive forms. All forms related html topics are covered",
       "url": "https://github.com/MuhammadHussain2004/Responsive-Forms",
@@ -1073,7 +1102,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 27,
+      "overall_rank": 28,
       "name": "basecamp-trial",
       "description": "Multi-page adventure gear rental website built with HTML & CSS",
       "url": "https://github.com/MuhammadHussain2004/basecamp-trial",
@@ -1100,7 +1129,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 28,
+      "overall_rank": 29,
       "name": "microsoft-clone-website-Tailwind",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/microsoft-clone-website-Tailwind",
