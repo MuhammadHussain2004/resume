@@ -991,6 +991,33 @@
     },
     {
       "overall_rank": 24,
+      "name": "SMIT-Batch22-JS-Assignments",
+      "description": "",
+      "url": "https://github.com/MuhammadHussain2004/SMIT-Batch22-JS-Assignments",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "JavaScript",
+        "HTML"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-11-07T13:46:20Z",
+      "created_at": "2026-10-30T14:49:14Z",
+      "score": 16,
+      "full_stack": false,
+      "eligible": true,
+      "capabilities": [],
+      "feature_domains": [
+        "catalog/commerce"
+      ],
+      "technologies": [],
+      "source_file_count": 103,
+      "test_file_count": 0,
+      "evidence_files": [],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 25,
       "name": "stone-paper-scissor",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/stone-paper-scissor",
@@ -1018,7 +1045,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 25,
+      "overall_rank": 26,
       "name": "tic-tac-toe-game",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/tic-tac-toe-game",
@@ -1041,33 +1068,6 @@
       "feature_domains": [],
       "technologies": [],
       "source_file_count": 3,
-      "test_file_count": 0,
-      "evidence_files": [],
-      "tree_scan_complete": true
-    },
-    {
-      "overall_rank": 26,
-      "name": "SMIT-Batch22-JS-Assignments",
-      "description": "",
-      "url": "https://github.com/MuhammadHussain2004/SMIT-Batch22-JS-Assignments",
-      "homepage": "",
-      "topics": [],
-      "languages": [
-        "JavaScript",
-        "HTML"
-      ],
-      "stars": 0,
-      "pushed_at": "2026-10-30T17:25:06Z",
-      "created_at": "2026-10-30T14:49:14Z",
-      "score": 12,
-      "full_stack": false,
-      "eligible": true,
-      "capabilities": [],
-      "feature_domains": [
-        "workflow/state machine"
-      ],
-      "technologies": [],
-      "source_file_count": 56,
       "test_file_count": 0,
       "evidence_files": [],
       "tree_scan_complete": true
