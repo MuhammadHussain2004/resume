@@ -438,6 +438,49 @@
     },
     {
       "overall_rank": 9,
+      "name": "hrpay-pro",
+      "description": "Full-Stack HR and Payroll Management System using Angular 20, ASP.NET Core 10, Entity Framework Core and SQL Server.",
+      "url": "https://github.com/MuhammadHussain2004/hrpay-pro",
+      "homepage": "",
+      "topics": [],
+      "languages": [
+        "C#",
+        "CSS",
+        "HTML",
+        "TypeScript"
+      ],
+      "stars": 0,
+      "pushed_at": "2026-11-27T11:23:42Z",
+      "created_at": "2026-11-27T11:17:27Z",
+      "score": 78,
+      "full_stack": true,
+      "eligible": true,
+      "capabilities": [
+        "frontend",
+        "backend",
+        "database",
+        "API layer",
+        "automated testing",
+        "separated frontend/backend architecture"
+      ],
+      "feature_domains": [
+        "catalog/commerce",
+        "uploads/imports"
+      ],
+      "technologies": [
+        "ASP.NET",
+        "Angular",
+        "TypeScript"
+      ],
+      "source_file_count": 53,
+      "test_file_count": 1,
+      "evidence_files": [
+        "frontend/package.json"
+      ],
+      "tree_scan_complete": true
+    },
+    {
+      "overall_rank": 10,
       "name": "ShopGuard",
       "description": "The purpose of this project is to develop a role based access system. Authentication and Authorization is the priority of this project",
       "url": "https://github.com/MuhammadHussain2004/ShopGuard",
@@ -488,7 +531,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 10,
+      "overall_rank": 11,
       "name": "Wanderly-Travel-Recommendation",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/Wanderly-Travel-Recommendation",
@@ -529,7 +572,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 11,
+      "overall_rank": 12,
       "name": "Multi-pages-website-react",
       "description": "ecoomerce multi pages websites",
       "url": "https://github.com/MuhammadHussain2004/Multi-pages-website-react",
@@ -569,7 +612,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 12,
+      "overall_rank": 13,
       "name": "paradise-nursery",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/paradise-nursery",
@@ -609,7 +652,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 13,
+      "overall_rank": 14,
       "name": "currency-converter",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/currency-converter",
@@ -643,7 +686,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 14,
+      "overall_rank": 15,
       "name": "UI-project",
       "description": "Practicing Reactjs",
       "url": "https://github.com/MuhammadHussain2004/UI-project",
@@ -682,7 +725,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 15,
+      "overall_rank": 16,
       "name": "Gallery-project",
       "description": "Practicing Reactjs",
       "url": "https://github.com/MuhammadHussain2004/Gallery-project",
@@ -723,7 +766,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 16,
+      "overall_rank": 17,
       "name": "Notes-app",
       "description": "Practicing Reactjs",
       "url": "https://github.com/MuhammadHussain2004/Notes-app",
@@ -763,7 +806,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 17,
+      "overall_rank": 18,
       "name": "Card-project",
       "description": "practicing reactjs",
       "url": "https://github.com/MuhammadHussain2004/Card-project",
@@ -801,7 +844,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 18,
+      "overall_rank": 19,
       "name": "Expense-Tracker",
       "description": "Expense tracker project using html css and Javacsript",
       "url": "https://github.com/MuhammadHussain2004/Expense-Tracker",
@@ -832,7 +875,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 19,
+      "overall_rank": 20,
       "name": "Railway-Management-system-project-java-netbeans",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/Railway-Management-system-project-java-netbeans",
@@ -864,7 +907,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 20,
+      "overall_rank": 21,
       "name": "weather-app",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/weather-app",
@@ -896,7 +939,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 21,
+      "overall_rank": 22,
       "name": "animated-portfolio-design",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/animated-portfolio-design",
@@ -926,7 +969,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 22,
+      "overall_rank": 23,
       "name": "to-do-list",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/to-do-list",
@@ -956,7 +999,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 23,
+      "overall_rank": 24,
       "name": "memory-card-game",
       "description": "A simple and interactive memory card matching game built with HTML, CSS, and JavaScript. Players flip cards to find matching pairs, testing focus and memory skills with smooth animations and responsive design.",
       "url": "https://github.com/MuhammadHussain2004/memory-card-game",
@@ -990,7 +1033,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 24,
+      "overall_rank": 25,
       "name": "SMIT-Batch22-JS-Assignments",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/SMIT-Batch22-JS-Assignments",
@@ -1017,7 +1060,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 25,
+      "overall_rank": 26,
       "name": "stone-paper-scissor",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/stone-paper-scissor",
@@ -1045,7 +1088,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 26,
+      "overall_rank": 27,
       "name": "tic-tac-toe-game",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/tic-tac-toe-game",
@@ -1073,7 +1116,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 27,
+      "overall_rank": 28,
       "name": "Hackathon-website",
       "description": "HCM Lite static hackathon website built with HTML, CSS and Bootstrap",
       "url": "https://github.com/MuhammadHussain2004/Hackathon-website",
@@ -1102,7 +1145,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 28,
+      "overall_rank": 29,
       "name": "basecamp-trial",
       "description": "Multi-page adventure gear rental website built with HTML & CSS",
       "url": "https://github.com/MuhammadHussain2004/basecamp-trial",
@@ -1129,7 +1172,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 29,
+      "overall_rank": 30,
       "name": "Responsive-Forms",
       "description": "responsive forms. All forms related html topics are covered",
       "url": "https://github.com/MuhammadHussain2004/Responsive-Forms",
@@ -1156,7 +1199,7 @@
       "tree_scan_complete": true
     },
     {
-      "overall_rank": 30,
+      "overall_rank": 31,
       "name": "microsoft-clone-website-Tailwind",
       "description": "",
       "url": "https://github.com/MuhammadHussain2004/microsoft-clone-website-Tailwind",
